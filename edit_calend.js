@@ -14,7 +14,7 @@
                 http://opensource.org/licenses/gpl-license.php
 \* ------------------------------------------------------------------------ */
 //  wersja:
-	var tmp_VERSION = '0.1.1';  // = oJobSchEd.version = oJobSchEd.ver
+	var tmp_VERSION = '0.2.0';  // = oJobSchEd.version = oJobSchEd.ver
 // ------------------------------------------------------------------------ //
 
 /* =====================================================
@@ -48,6 +48,8 @@ oJobSchEd.lang = {"":""
 	,"label - activity" : "Typ"
 	,"label - date start" : "Początek"
 	,"label - date end" : "Koniec"
+	,"label - new activity" : "Dodaj wpis"
+	,"close button label" : "Zamknij"
 	,"activities" : [
 		{name: "Urlop", color:"00cc00"},
 		{name: "Delegacja", color:"0000cc"},
@@ -61,14 +63,35 @@ oJobSchEd.init = function()
 {
 	this.addEdButton()
 
-	// form
+	// task form
 	var msg = new sftJSmsg();
 	msg.repositionMsgCenter();
 	msg.styleWidth = 500;
+	msg.styleZbase += 30;
 	msg.showCancel = true;
 	msg.autoOKClose = false;
 	msg.createRegularForm = false;
-	this.oMsg = msg;	
+	this.oMsgTask = msg;	
+
+	// persons list
+	var msg = new sftJSmsg();
+	msg.repositionMsgCenter();
+	msg.styleWidth = 300;
+	msg.styleZbase += 10;
+	msg.showCancel = false;
+	msg.lang['OK'] = this.lang["close button label"];
+	msg.createRegularForm = false;
+	this.oMsgListPersons = msg;	
+
+	// tasks of a person list
+	var msg = new sftJSmsg();
+	msg.repositionMsgCenter();
+	msg.styleWidth = 500;
+	msg.styleZbase += 20;
+	msg.showCancel = false;
+	msg.lang['OK'] = this.lang["close button label"];
+	msg.createRegularForm = false;
+	this.oMsgListTasks = msg;	
 }
 if (wgAction=="edit" || wgAction=="submit")
 {
@@ -98,23 +121,20 @@ oJobSchEd.addEdButton = function()
 \* ------------------------------------------------------------------------ */
 oJobSchEd.startEditor = function()
 {
+	// read wiki code
 	var strWikicode = this.getContents();
 	if (strWikicode===false)
 	{
 		jsAlert(this.lang["gantt not found"])
 	}
+	// parse code to internal structures
 	if (!this.parse(strWikicode))	// on errors messages are displayed inside parse()
 	{
 		return;
 	}
 
-	// tmp - add task window test
-	this.showAddTaskWindow();
-	// tmp
-	/*
-	strWikicode = this.buildWikicode();
-	this.setContents(strWikicode);
-	*/
+	// main editor's window - list persons
+	this.showListPersonsWindow();
 }
 
 /* ------------------------------------------------------------------------ *\

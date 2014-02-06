@@ -5,9 +5,9 @@
 /* ------------------------------------------------------------------------ *\
 	Show/build add task window
 \* ------------------------------------------------------------------------ */
-oJobSchEd.showAddTaskWindow = function()
+oJobSchEd.showAddTaskWindow = function(intPersonId)
 {
-	var msg = this.oMsg;
+	var msg = this.oMsgTask;
 	
 	// show form
 	msg.repositionMsgCenter();
@@ -32,7 +32,7 @@ oJobSchEd.showAddTaskWindow = function()
 		};
 	}
 	// defaults
-	this.oNewTask.intPersonId = oPersonLbls[0].value;
+	this.oNewTask.intPersonId = (typeof(intPersonId)=='undefined' ? oPersonLbls[0].value : intPersonId);
 	this.oNewTask.intActivityId = oActivityLbls[0].value;
 	var now = new Date();
 	this.oNewTask.strDateStart = now.dateFormat(this.conf.strFormat);
@@ -77,6 +77,6 @@ oJobSchEd.submitAddTaskWindow = function()
 	// output
 	this.setContents(strWikicode);
 	// close
-	var msg = this.oMsg;
+	var msg = this.oMsgTask;
 	msg.close();
 }

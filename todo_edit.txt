@@ -14,12 +14,13 @@
 ** Moved methods to different files for easier editing...
 ** <del>Change current usage of loose objects to class instances usage</del> - not really needed...
 ** Some cleanup
+* Dialog with a list of all persons.
+* Dialog with a list of all tasks of a person.
 
 -----------------------
  TODO
 -----------------------
-* Dialog with a list of all persons.
-* Dialog with a list of all tasks of a person.
+* Refresh methods for dialogs (run after add/edit).
 * Edit dialog based on add dialog.
 * Add person dialog based on add task dialog.
 * Linking everything as on original mockups.
@@ -36,6 +37,7 @@
 *** add an inline comment with the original file name at the begging ("// FileName.js, line#0") and the end of the file ("// FileName.js, EOF").
 *** add modified files to a single file
 *** check if any of the files was modified and serve cached file if not (mod check by cached file date)
+*** "FileName" shown in the combined file as not a real name (rather a name of a module)
 
 -----------------------
 THE LOADER CHECK:
