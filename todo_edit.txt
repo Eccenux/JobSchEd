@@ -28,18 +28,14 @@
 * Delete task methods.
 * Delete person methods.
 * Refresh of fields problem (they are filled with previous values upon add => out of sync with oNewTask => unexpected)
+* Use <del>the loader or</del> combine "modules" into one file with a simple loader.
+* edit_calend_cTask -> edit_calend.structures as a more general info file on most important structures
+* Minify core (as a module)
 
 -----------------------
  TODO
 -----------------------
-* Use the loader or simply combine "modules" into one file...
-** Own loader would:
-*** remove in-line comments without removing any whitespace (might be troublesome... e.g. "djfhjshd // test").
-*** remove multi-line comments but adding an in-line comment with the original line number of the end of the comment ("// EOC@line#X").
-*** add an in-line comment with the original file name at the begging ("// FileName.js, line#0") and the end of the file ("// FileName.js, EOF").
-*** add modified files to a single file
-*** check if any of the files was modified and serve cached file if not (mod check by cached file date)
-*** "FileName" shown in the combined file as not a real name (rather a name of a module)
+* Improve minification (in-line comments)
 
 -----------------------
  Someday...
@@ -50,10 +46,16 @@
 -----------------------
 THE LOADER CHECK:
 -----------------------
+	// simple
 	var z = ""+
 		"djfhjshd // test"
 	;
+	// evil
 	var x = /a"aa\/\/asa/ " \
 	//\
 	";
 	var x = /aa\/*a*/;
+	// a bit evil
+	var x = /aa\/*a*/
+	;
+	

@@ -10,6 +10,8 @@
  
 	To activate this extension, add the following into your LocalSettings.php file:
 	require_once("$IP/extensions/JobSchEd/JobSchEd.php");
+	OR
+	Import edit_calend.modules.mini.js and date-functions.js
 	
 	@ingroup Extensions
 	@author Maciej Jaros <egil@wp.pl>
@@ -31,7 +33,7 @@ if( !defined( 'MEDIAWIKI' ) ) {
 $wgExtensionCredits['parserhook'][] = array(
 	'path'         => __FILE__,
 	'name'         => 'JobSchEd',
-	'version'      => '0.5.0',
+	'version'      => '0.6.0',
 	'author'       => 'Maciej Jaros', 
 	'url'          => 'http://www.mediawiki.org/wiki/Extension:JobSchEd',
 	'description'  => ''
@@ -52,7 +54,7 @@ $wgJobSchEdScriptDir = "{$wgScriptPath}/extensions/JobSchEd";
 //
 // Class setup
 //
-//$wgAutoloadClasses['ecJobSchEd'] = "{$wgJobSchEdDir}/JobSchEd.body.php";
+$wgAutoloadClasses['ecSimpleJSLoader'] = "{$wgJobSchEdDir}/JobSchEd.loader.php";
 
 //
 // add hook setup and init class/object
@@ -60,12 +62,16 @@ $wgJobSchEdScriptDir = "{$wgScriptPath}/extensions/JobSchEd";
 $wgHooks['BeforePageDisplay'][] = 'efJobSchEdSetup';
 function efJobSchEdSetup($wgOut)
 {
+	global $wgJobSchEdDir;
+
+	$oLoader = new ecSimpleJSLoader($wgOut, $wgJobSchEdDir);
+	
 	// core
 	$wgOut->addHeadItem('JobSchEdJS' , Html::linkedScript( efJobSchEdgetCSSJSLink("edit_calend.js") ) );
 	
 	// "modules"
 	$arrModules = array(
-		'cTask',
+		'_core',
 		'form_cr',
 		'parsing',
 		'wikicodebuilder',
@@ -74,11 +80,7 @@ function efJobSchEdSetup($wgOut)
 		'msgs_list_p',
 		'msgs_list_t',
 	);
-	foreach ($arrModules as $m)
-	{
-		// TODO: use the loader or simply combain this into one file...
-		$wgOut->addHeadItem("JobSchEdJS_$m" , Html::linkedScript( efJobSchEdgetCSSJSLink("edit_calend_$m.js") ) );
-	}
+	$oLoader->loadModules($arrModules);
 	
 	// Note! This name should be the same as in JSWikiGantt extension
 	$wgOut->addHeadItem('jsganttDateJS' , Html::linkedScript( efJobSchEdgetCSSJSLink("date-functions.js") ) );
