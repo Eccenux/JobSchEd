@@ -33,7 +33,7 @@ if( !defined( 'MEDIAWIKI' ) ) {
 $wgExtensionCredits['parserhook'][] = array(
 	'path'         => __FILE__,
 	'name'         => 'JobSchEd',
-	'version'      => '0.6.6',
+	'version'      => '0.6.7',
 	'author'       => 'Maciej Jaros', 
 	'url'          => 'http://www.mediawiki.org/wiki/Extension:JobSchEd',
 	'description'  => ''

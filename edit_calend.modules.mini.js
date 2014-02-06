@@ -2,7 +2,7 @@
 // _core, line#0
 
 // EOC@line#16
-	var tmp_VERSION = '0.6.6';
+	var tmp_VERSION = '0.6.7';
 // EOC@line#22
 if (oJobSchEd!=undefined)
 {
@@ -136,7 +136,7 @@ oJobSchEd.startEditor = function()
 		return;
 	}
 
-
+	// main editor's window - list persons
 	this.oListPersons.show();
 }
 // EOC@line#171

@@ -103,13 +103,20 @@ class ecSimpleJSLoader
 		// lines (simpli/uni)fication
 		$strCode = preg_replace(array("#\r\n#", "#\r#"), "\n", $strCode);
 		
-		// remove in-line comments without removing any horizontal whitespace
+		// remove in-line comments without removing any vertical whitespace
+		// TODO: A different aproach? Preserve strings and then match comments...
 		if ($this->isRemoveInlineComments)
 		{
-			$strCode = preg_replace("#[ \t]*\//[^\"\n]*[^\\\\\"\n](?=\n)#", '', $strCode);
+			$strCode = preg_replace("#[ \t]*//[^\"\'\n]*[^\\\\\"\'\n](?=\n)#", '', $strCode);
+
+			// not working: $strCode = preg_replace("#\n//[^'\n]*(['\"])[^'\n]*\1(?=\n)#", "\n", $strCode);
+			$strCode = preg_replace("#\n//[^\"\n]*\"[^\"\n]*\"[^\"\n]*(?=\n)#", "\n", $strCode);
+			$strCode = preg_replace("#\n//[^'\n]*'[^'\n]*'[^'\n]*(?=\n)#", "\n", $strCode);
+
+			$strCode = preg_replace("#\n//(?=\n)#", "\n", $strCode);
 		}
 		
-		// remove vertical whitespace from EOL
+		// remove horizontal whitespace from EOL
 		$strCode = preg_replace("#[ \t]+\n#", "\n", $strCode);
 		
 		// remove multi-line comments, add in-line comment in format: "// EOC@line#X".
