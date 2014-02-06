@@ -17,19 +17,25 @@ oJobSchEd.oListPersons.show = function()
 		var oP = this.oParent.arrPersons[i];
 		strList += ''
 			+'<li>'
-				+'<a href="javascript:oJobSchEd.oListAct.show('+oP.intId.toString()+')">'
+				+'<a href="javascript:oJobSchEd.oListAct.show('+oP.intId.toString()+')" title="'
+						+this.oParent.lang["title - list act"]
+					+'">'
 					+oP.strName
 					+' '
 					+'<img src="'+this.oParent.conf['img - list']+'" alt=" " />'
 				+'</a>'
 				+' '
-				+'<a href="javascript:oJobSchEd.oModPerson.showEdit('+oP.intId.toString()+')">'
+				+'<a href="javascript:oJobSchEd.oModPerson.showEdit('+oP.intId.toString()+')" title="'
+						+this.oParent.lang["title - edit"]
+					+'">'
 					+'<img src="'+this.oParent.conf['img - edit']+'" alt="'
 						+this.oParent.lang['alt - mod']
 					+'" />'
 				+'</a>'
 				+' '
-				+'<a href="javascript:oJobSchEd.oModPerson.showDel('+oP.intId.toString()+')">'
+				+'<a href="javascript:oJobSchEd.oModPerson.showDel('+oP.intId.toString()+')" title="'
+						+this.oParent.lang["title - del"]
+					+'">'
 					+'<img src="'+this.oParent.conf['img - del']+'" alt="'
 						+this.oParent.lang['alt - del']
 					+'" />'
@@ -39,7 +45,9 @@ oJobSchEd.oListPersons.show = function()
 	}
 	strList += ''
 		+'<li>'
-			+'<a href="javascript:oJobSchEd.oModPerson.showAdd()">'
+			+'<a href="javascript:oJobSchEd.oModPerson.showAdd()" title="'
+						+this.oParent.lang["title - add"]
+					+'">'
 				+this.oParent.lang['label - new person']
 			+'</a>'
 		+'</li>'

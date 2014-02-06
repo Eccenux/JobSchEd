@@ -40,6 +40,8 @@
 * Inline comments evil code fix
 * Loader tester
 * simpler isChanged
+* Enable adding persons to an empty diagram
+* Titles for links
 
 -----------------------
  TODO

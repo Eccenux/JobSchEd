@@ -14,7 +14,7 @@
                 http://opensource.org/licenses/gpl-license.php
 \* ------------------------------------------------------------------------ */
 //  wersja:
-	var tmp_VERSION = '0.6.4';  // = oJobSchEd.version = oJobSchEd.ver
+	var tmp_VERSION = '0.6.6';  // = oJobSchEd.version = oJobSchEd.ver
 // ------------------------------------------------------------------------ //
 
 /* =====================================================
@@ -59,6 +59,10 @@ oJobSchEd.lang = {"":""
 	,"alt - mod" : "Zmień"
 	,"alt - del" : "Usuń"
 	,"close button label" : "Zamknij"
+	,"title - list act" : "Pokaż wpisy osoby"
+	,"title - edit" : "Edytuj"
+	,"title - add" : "Dodaj"
+	,"title - del" : "Usuń"
 	,"activities" : [
 		{name: "Urlop", color:"00cc00"},
 		{name: "Delegacja", color:"0000cc"},
@@ -227,8 +231,9 @@ oJobSchEd.addTask = function(oTask)
 oJobSchEd.addPerson = function(strPersonName)
 {
 	var intPer = this.arrPersons.length;
+	var intDefaultStep = 10;
 	// new id
-	var intPersonId = this.arrPersons[intPer-1].intId + 10;
+	var intPersonId = (intPer>0) ? this.arrPersons[intPer-1].intId + intDefaultStep : intDefaultStep;
 	while (this.indexOfPerson (intPersonId)!=-1)
 	{
 		intPersonId+=10;

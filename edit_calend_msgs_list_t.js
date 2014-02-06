@@ -35,14 +35,18 @@ oJobSchEd.oListAct.show = function(intPersonId)
 		}
 		strList += ''
 			+'<li>'
-				+'<a href="javascript:oJobSchEd.oModTask.showEdit('+oP.intId.toString()+', '+j.toString()+')">'
+				+'<a href="javascript:oJobSchEd.oModTask.showEdit('+oP.intId.toString()+', '+j.toString()+')" title="'
+						+this.oParent.lang["title - edit"]
+					+'">'
 					+oA.strDateStart+" - "+oA.strDateEnd
 					+": "+this.oParent.lang.activities[oA.intId].name
 					+' '
 					+'<img src="'+this.oParent.conf['img - edit']+'" alt=" " />'
 				+'</a>'
 				+' '
-				+'<a href="javascript:oJobSchEd.oModTask.showDel('+oP.intId.toString()+', '+j.toString()+')">'
+				+'<a href="javascript:oJobSchEd.oModTask.showDel('+oP.intId.toString()+', '+j.toString()+')" title="'
+						+this.oParent.lang["title - del"]
+					+'">'
 					+'<img src="'+this.oParent.conf['img - del']+'" alt="'
 						+this.oParent.lang['alt - del']
 					+'" />'
@@ -52,7 +56,9 @@ oJobSchEd.oListAct.show = function(intPersonId)
 	}
 	strList += ''
 		+'<li>'
-			+'<a href="javascript:oJobSchEd.oModTask.showAdd('+oP.intId.toString()+')">'
+			+'<a href="javascript:oJobSchEd.oModTask.showAdd('+oP.intId.toString()+')" title="'
+						+this.oParent.lang["title - add"]
+					+'">'
 				+this.oParent.lang['label - new activity']
 			+'</a>'
 		+'</li>'

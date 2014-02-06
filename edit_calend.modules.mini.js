@@ -2,7 +2,7 @@
 // _core, line#0
 
 // EOC@line#16
-	var tmp_VERSION = '0.6.4';
+	var tmp_VERSION = '0.6.6';
 // EOC@line#22
 if (oJobSchEd!=undefined)
 {
@@ -43,13 +43,17 @@ oJobSchEd.lang = {"":""
 	,"alt - mod" : "Zmień"
 	,"alt - del" : "Usuń"
 	,"close button label" : "Zamknij"
+	,"title - list act" : "Pokaż wpisy osoby"
+	,"title - edit" : "Edytuj"
+	,"title - add" : "Dodaj"
+	,"title - del" : "Usuń"
 	,"activities" : [
 		{name: "Urlop", color:"00cc00"},
 		{name: "Delegacja", color:"0000cc"},
 		{name: "Choroba", color:"990000"}
 	]
 }
-// EOC@line#70
+// EOC@line#74
 oJobSchEd.init = function()
 {
 	this.addEdButton()
@@ -102,7 +106,7 @@ if (wgAction=="edit" || wgAction=="submit")
 {
 	addOnloadHook(function() {oJobSchEd.init()});
 }
-// EOC@line#126
+// EOC@line#130
 oJobSchEd.addEdButton = function()
 {
 	var elTB = document.getElementById('toolbar');
@@ -117,7 +121,7 @@ oJobSchEd.addEdButton = function()
 	nel.appendChild(document.createTextNode(this.lang["button label"]));
 	elTB.appendChild(nel);
 }
-// EOC@line#144
+// EOC@line#148
 oJobSchEd.startEditor = function()
 {
 
@@ -135,7 +139,7 @@ oJobSchEd.startEditor = function()
 
 	this.oListPersons.show();
 }
-// EOC@line#167
+// EOC@line#171
 oJobSchEd.indexOfPerson = function(intPersonId)
 {
 	for (var i=0; i<this.arrPersons.length; i++)
@@ -147,7 +151,7 @@ oJobSchEd.indexOfPerson = function(intPersonId)
 	}
 	return -1;
 }
-// EOC@line#183
+// EOC@line#187
 oJobSchEd.getActivityId = function(pRes, pColor)
 {
 	//"activities"
@@ -163,7 +167,7 @@ oJobSchEd.getActivityId = function(pRes, pColor)
 	}
 	return -1;
 }
-// EOC@line#202
+// EOC@line#206
 oJobSchEd.addTask = function(oTask)
 {
 	var intPer = this.indexOfPerson (oTask.intPersonId);
@@ -184,12 +188,13 @@ oJobSchEd.addTask = function(oTask)
 		intId : oTask.intActivityId
 	}
 }
-// EOC@line#226
+// EOC@line#230
 oJobSchEd.addPerson = function(strPersonName)
 {
 	var intPer = this.arrPersons.length;
+	var intDefaultStep = 10;
 
-	var intPersonId = this.arrPersons[intPer-1].intId + 10;
+	var intPersonId = (intPer>0) ? this.arrPersons[intPer-1].intId + intDefaultStep : intDefaultStep;
 	while (this.indexOfPerson (intPersonId)!=-1)
 	{
 		intPersonId+=10;
@@ -201,7 +206,7 @@ oJobSchEd.addPerson = function(strPersonName)
 		arrActivities : new Array()
 	}
 }
-// EOC@line#246
+// EOC@line#251
 oJobSchEd.setTask = function(oTask, intPersonId, intActIndex)
 {
 	var intPer = this.indexOfPerson (intPersonId);
@@ -218,7 +223,7 @@ oJobSchEd.setTask = function(oTask, intPersonId, intActIndex)
 	}
 	return true;
 }
-// EOC@line#266
+// EOC@line#271
 oJobSchEd.setPerson = function(strPersonName, intPersonId)
 {
 	var intPer = this.indexOfPerson (intPersonId);
@@ -231,7 +236,7 @@ oJobSchEd.setPerson = function(strPersonName, intPersonId)
 	this.arrPersons[intPer].strName = strPersonName;
 	return true;
 }
-// EOC@line#282
+// EOC@line#287
 oJobSchEd.delTask = function(intPersonId, intActIndex)
 {
 	var intPer = this.indexOfPerson (intPersonId);
@@ -244,7 +249,7 @@ oJobSchEd.delTask = function(intPersonId, intActIndex)
 	this.arrPersons[intPer].arrActivities[intActIndex] = undefined;
 	return true;
 }
-// EOC@line#298
+// EOC@line#303
 oJobSchEd.delPerson = function(intPersonId)
 {
 	var intPer = this.indexOfPerson (intPersonId);
@@ -259,7 +264,7 @@ oJobSchEd.delPerson = function(intPersonId)
 	this.arrPersons.myReIndexArray()
 	return true;
 }
-// EOC@line#316
+// EOC@line#321
 Array.prototype.myReIndexArray = function()
 {
 	for (var i=0; i<this.length; i++)
@@ -864,19 +869,25 @@ oJobSchEd.oListPersons.show = function()
 		var oP = this.oParent.arrPersons[i];
 		strList += ''
 			+'<li>'
-				+'<a href="javascript:oJobSchEd.oListAct.show('+oP.intId.toString()+')">'
+				+'<a href="javascript:oJobSchEd.oListAct.show('+oP.intId.toString()+')" title="'
+						+this.oParent.lang["title - list act"]
+					+'">'
 					+oP.strName
 					+' '
 					+'<img src="'+this.oParent.conf['img - list']+'" alt=" " />'
 				+'</a>'
 				+' '
-				+'<a href="javascript:oJobSchEd.oModPerson.showEdit('+oP.intId.toString()+')">'
+				+'<a href="javascript:oJobSchEd.oModPerson.showEdit('+oP.intId.toString()+')" title="'
+						+this.oParent.lang["title - edit"]
+					+'">'
 					+'<img src="'+this.oParent.conf['img - edit']+'" alt="'
 						+this.oParent.lang['alt - mod']
 					+'" />'
 				+'</a>'
 				+' '
-				+'<a href="javascript:oJobSchEd.oModPerson.showDel('+oP.intId.toString()+')">'
+				+'<a href="javascript:oJobSchEd.oModPerson.showDel('+oP.intId.toString()+')" title="'
+						+this.oParent.lang["title - del"]
+					+'">'
 					+'<img src="'+this.oParent.conf['img - del']+'" alt="'
 						+this.oParent.lang['alt - del']
 					+'" />'
@@ -886,7 +897,9 @@ oJobSchEd.oListPersons.show = function()
 	}
 	strList += ''
 		+'<li>'
-			+'<a href="javascript:oJobSchEd.oModPerson.showAdd()">'
+			+'<a href="javascript:oJobSchEd.oModPerson.showAdd()" title="'
+						+this.oParent.lang["title - add"]
+					+'">'
 				+this.oParent.lang['label - new person']
 			+'</a>'
 		+'</li>'
@@ -898,7 +911,7 @@ oJobSchEd.oListPersons.show = function()
 	msg.show(strList);
 	msg.repositionMsgCenter();
 }
-// EOC@line#57
+// EOC@line#65
 oJobSchEd.oListPersons.refresh = function()
 {
 
@@ -941,14 +954,18 @@ oJobSchEd.oListAct.show = function(intPersonId)
 		}
 		strList += ''
 			+'<li>'
-				+'<a href="javascript:oJobSchEd.oModTask.showEdit('+oP.intId.toString()+', '+j.toString()+')">'
+				+'<a href="javascript:oJobSchEd.oModTask.showEdit('+oP.intId.toString()+', '+j.toString()+')" title="'
+						+this.oParent.lang["title - edit"]
+					+'">'
 					+oA.strDateStart+" - "+oA.strDateEnd
 					+": "+this.oParent.lang.activities[oA.intId].name
 					+' '
 					+'<img src="'+this.oParent.conf['img - edit']+'" alt=" " />'
 				+'</a>'
 				+' '
-				+'<a href="javascript:oJobSchEd.oModTask.showDel('+oP.intId.toString()+', '+j.toString()+')">'
+				+'<a href="javascript:oJobSchEd.oModTask.showDel('+oP.intId.toString()+', '+j.toString()+')" title="'
+						+this.oParent.lang["title - del"]
+					+'">'
 					+'<img src="'+this.oParent.conf['img - del']+'" alt="'
 						+this.oParent.lang['alt - del']
 					+'" />'
@@ -958,7 +975,9 @@ oJobSchEd.oListAct.show = function(intPersonId)
 	}
 	strList += ''
 		+'<li>'
-			+'<a href="javascript:oJobSchEd.oModTask.showAdd('+oP.intId.toString()+')">'
+			+'<a href="javascript:oJobSchEd.oModTask.showAdd('+oP.intId.toString()+')" title="'
+						+this.oParent.lang["title - add"]
+					+'">'
 				+this.oParent.lang['label - new activity']
 			+'</a>'
 		+'</li>'
@@ -970,7 +989,7 @@ oJobSchEd.oListAct.show = function(intPersonId)
 	msg.show(strList);
 	msg.repositionMsgCenter();
 }
-// EOC@line#70
+// EOC@line#76
 oJobSchEd.oListAct.refresh = function()
 {
 
