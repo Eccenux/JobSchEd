@@ -4,69 +4,85 @@
 */
 class ecSimpleJSLoader
 {
-	var $noCache = false;					// always generate scripts from scratch
-	var $wgOut;
-	var $strBaseScriptDir;						// base path for modules and generated scripts
-	var $strBaseModulesName = 'edit_calend_';	// prefix for modules loaded in loadModules
-	var $strMiniModulesElId = 'JobSchEdJSmini';	// element id for a script generated in loadModules
-	var $strMiniModulesName = 'edit_calend.modules.mini.js';	// file name for a script generated in loadModules
+	// true => always generate scripts from scratch
+	var $noCache = false;
+	// base path for modules and generated scripts
+	var $strBaseScriptDir;
+	// prefix for modules loaded in createMiniModules
+	var $strBaseModulesName = 'edit_calend_';
+	// file name for a script generated in createMiniModules
+	var $strMiniModulesName = 'edit_calend.modules.mini.js';
 	// minification options
 	var $isRemoveInlineComments = true;
 	var $isRemoveMultiComments = true;
 
-	function __construct($wgOut, $strBaseScriptDir)
+	function __construct($strBaseScriptDir)
 	{
-		$this->wgOut = $wgOut;
 		$this->strBaseScriptDir = $strBaseScriptDir;
 	}
 
 	/*
-		Load an array of JS modules.
+		Create minified file from an array of JS modules.
 		
 		$arrModules should contain names of files without the prefix and an extension
 	*/
-	function loadModules($arrModules)
+	function createMiniModules($arrModules)
 	{
 		$strOutputPath = "{$this->strBaseScriptDir}/{$this->strMiniModulesName}";
 		
 		// check if we need to change anything
 		if (!$this->noCache)
 		{
-			$intMaxTime = 0;
-			if (file_exists($strOutputPath))
-			{
-				foreach ($arrModules as $m)
-				{
-					$intTmpTime = filemtime($this->getModulePath($m));
-					if ($intTmpTime>$intMaxTime)
-					{
-						$intMaxTime = $intTmpTime;
-					}
-				}
-				$intFileTime = filemtime($strOutputPath);
-			}
-			else
-			{
-				$intFileTime = $intMaxTime-1;	// always create
-			}
+			$isChanged = $this->isChanged($arrModules, $strOutputPath);
+		}
+		else
+		{
+			$isChanged = true;
 		}
 		
-		if ($this->noCache || $intFileTime<$intMaxTime)
+		// generate & create file
+		if ($isChanged)
 		{
-			// generate & create file
-			$strCode = '';
+			$hFile = fopen ($strOutputPath, 'w');
 			foreach ($arrModules as $m)
 			{
-				$strCode .= $this->getMiniContents($this->getModulePath($m));
-				$strCode .= "\n";
+				$strFileName = $m;
+				fwrite ($hFile, "\n// $strFileName, line#0\n");	// file start marker
+				fwrite ($hFile, $this->getMiniContents($this->getModulePath($m)));
+				fwrite ($hFile, "\n// $strFileName, EOF");		// EOF marker
 			}
-			file_put_contents($strOutputPath, $strCode);
+			fclose ($hFile);
 		}
 		
-		// TODO: return file name and move this outside of this function
-		$this->wgOut->addHeadItem($this->strMiniModulesElId, Html::linkedScript(efJobSchEdgetCSSJSLink($this->strMiniModulesName)));
+		return $this->strMiniModulesName;
 	}
 	
+	/*
+		Checks if any of module files were changed after changing the output file
+	*/
+	function isChanged($arrModules, $strOutputPath)
+	{
+		$intMaxTime = 0;
+		if (file_exists($strOutputPath))
+		{
+			foreach ($arrModules as $m)
+			{
+				$intTmpTime = filemtime($this->getModulePath($m));
+				if ($intTmpTime>$intMaxTime)
+				{
+					$intMaxTime = $intTmpTime;
+				}
+			}
+			$intFileTime = filemtime($strOutputPath);
+		}
+		else
+		{
+			$intFileTime = $intMaxTime-1;	// always create
+		}
+		
+		return ($intFileTime < $intMaxTime);
+	}
+
 	/*
 		Get module path
 	*/
@@ -104,10 +120,6 @@ class ecSimpleJSLoader
 			$strCode = $this->parseMultiCom($strCode);
 		}
 		
-		// TODO: Move this outside of this function
-		// add an in-line comment with the original file name
-		$strFileName = basename($strFilePath);
-		$strCode = "\n// $strFileName, line#0\n$strCode\n// $strFileName, EOF";
 		return $strCode;
 	}
 

@@ -33,7 +33,7 @@ if( !defined( 'MEDIAWIKI' ) ) {
 $wgExtensionCredits['parserhook'][] = array(
 	'path'         => __FILE__,
 	'name'         => 'JobSchEd',
-	'version'      => '0.6.1',
+	'version'      => '0.6.2',
 	'author'       => 'Maciej Jaros', 
 	'url'          => 'http://www.mediawiki.org/wiki/Extension:JobSchEd',
 	'description'  => ''
@@ -64,13 +64,10 @@ function efJobSchEdSetup($wgOut)
 {
 	global $wgJobSchEdDir;
 
-	$oLoader = new ecSimpleJSLoader($wgOut, $wgJobSchEdDir);
-	
-	// core
-	$wgOut->addHeadItem('JobSchEdJS' , Html::linkedScript( efJobSchEdgetCSSJSLink("edit_calend.js") ) );
+	$oLoader = new ecSimpleJSLoader($wgJobSchEdDir);
 	
 	// "modules"
-	$arrModules = array(
+	$strMiniModulesFile = $oLoader->loadModules(array(
 		'_core',
 		'form_cr',
 		'parsing',
@@ -79,8 +76,8 @@ function efJobSchEdSetup($wgOut)
 		'msgs_mod_t',
 		'msgs_list_p',
 		'msgs_list_t',
-	);
-	$oLoader->loadModules($arrModules);
+	));
+	$wgOut->addHeadItem('JobSchEdJSmini', Html::linkedScript(efJobSchEdgetCSSJSLink($strMiniModulesFile)));
 	
 	// Note! This name should be the same as in JSWikiGantt extension
 	$wgOut->addHeadItem('jsganttDateJS' , Html::linkedScript( efJobSchEdgetCSSJSLink("date-functions.js") ) );

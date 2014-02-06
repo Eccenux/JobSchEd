@@ -1,8 +1,8 @@
 
-// edit_calend__core.js, line#0
+// _core, line#0
 
 // EOC@line#16
-	var tmp_VERSION = '0.6.1';
+	var tmp_VERSION = '0.6.2';
 // EOC@line#22
 if (oJobSchEd!=undefined)
 {
@@ -287,9 +287,8 @@ Array.prototype.myReIndexArray = function()
 }
 
 // </nowiki>
-// edit_calend__core.js, EOF
-
-// edit_calend_form_cr.js, line#0
+// _core, EOF
+// form_cr, line#0
 
 // EOC@line#6
 // EOC@line#15
@@ -387,9 +386,8 @@ oJobSchEd.createForm = function(arrFields, strHeader)
 	;
 	return strRet;
 }
-// edit_calend_form_cr.js, EOF
-
-// edit_calend_parsing.js, line#0
+// form_cr, EOF
+// parsing, line#0
 
 // EOC@line#4
 // EOC@line#7
@@ -472,9 +470,8 @@ oJobSchEd.preParseTask = function(nodeTask)
 
 	return oTask;
 }
-// edit_calend_parsing.js, EOF
-
-// edit_calend_wikicodebuilder.js, line#0
+// parsing, EOF
+// wikicodebuilder, line#0
 
 // EOC@line#4
 // EOC@line#7
@@ -551,9 +548,8 @@ oJobSchEd.buildTaskcode = function(oTask)
 
 	return strWikiCode;
 }
-// edit_calend_wikicodebuilder.js, EOF
-
-// edit_calend_msgs_mod_p.js, line#0
+// wikicodebuilder, EOF
+// msgs_mod_p, line#0
 
 // EOC@line#4
 oJobSchEd.oModPerson = new Object();
@@ -659,9 +655,8 @@ oJobSchEd.oModPerson.submitCommon = function()
 
 	this.oParent.oListPersons.refresh();
 }
-// edit_calend_msgs_mod_p.js, EOF
-
-// edit_calend_msgs_mod_t.js, line#0
+// msgs_mod_p, EOF
+// msgs_mod_t, line#0
 
 // EOC@line#4
 oJobSchEd.oModTask = new Object();
@@ -853,9 +848,8 @@ oJobSchEd.oModTask.submitCommon = function()
 
 	this.oParent.oListAct.refresh();
 }
-// edit_calend_msgs_mod_t.js, EOF
-
-// edit_calend_msgs_list_p.js, line#0
+// msgs_mod_t, EOF
+// msgs_list_p, line#0
 
 // EOC@line#4
 oJobSchEd.oListPersons = new Object();
@@ -913,9 +907,8 @@ oJobSchEd.oListPersons.refresh = function()
 
 	this.show();
 }
-// edit_calend_msgs_list_p.js, EOF
-
-// edit_calend_msgs_list_t.js, line#0
+// msgs_list_p, EOF
+// msgs_list_t, line#0
 
 // EOC@line#4
 oJobSchEd.oListAct = new Object();
@@ -986,4 +979,4 @@ oJobSchEd.oListAct.refresh = function()
 
 	this.show();
 }
-// edit_calend_msgs_list_t.js, EOF
+// msgs_list_t, EOF

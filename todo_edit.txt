@@ -35,6 +35,7 @@
 ** remove in-line comments
 ** remove vertical whitespace from EOL
 * Correction of file change check.
+* Loader returns a file name rather then adding a head item (+some clean up in variables)
 
 -----------------------
  TODO
