@@ -2,25 +2,27 @@
 	Show and other methods for listing persons
 \* ------------------------------------------------------------------------ */
 
+oJobSchEd.oListPersons = new Object();
+
 /* ------------------------------------------------------------------------ *\
 	Show/build list window
 \* ------------------------------------------------------------------------ */
-oJobSchEd.showListPersonsWindow = function()
+oJobSchEd.oListPersons.show = function()
 {
-	var msg = this.oMsgListPersons;
+	var msg = this.oMsg;
 	
 	// show form
 	msg.repositionMsgCenter();
-	this.oNewTask = new Object();
 	
 	// persons list
 	var strList = '<ul style="text-align:left">';
-	for (var i=0; i<this.arrPersons.length; i++)
+	for (var i=0; i<this.oParent.arrPersons.length; i++)
 	{
+		var oP = this.oParent.arrPersons[i];
 		strList += ''
 			+'<li>'
-				+'<a href="javascript:oJobSchEd.showListTasksWindow('+this.arrPersons[i].intId.toString()+')">'
-					+this.arrPersons[i].strName
+				+'<a href="javascript:oJobSchEd.oListAct.show('+oP.intId.toString()+')">'
+					+oP.strName
 				+'</a>'
 			+'</li>'
 		;
@@ -33,12 +35,11 @@ oJobSchEd.showListPersonsWindow = function()
 /* ------------------------------------------------------------------------ *\
 	Refresh list
 \* ------------------------------------------------------------------------ */
-oJobSchEd.refreshListPersonsWindow = function()
+oJobSchEd.oListPersons.refresh = function()
 {
 	// close previous
-	var msg = this.oMsgListPersons;
-	msg.close();
+	this.oMsg.close();
 
 	// show again
-	this.showListPersonsWindow();
+	this.show();
 }

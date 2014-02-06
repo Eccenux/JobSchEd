@@ -1,51 +1,53 @@
 ﻿/* ------------------------------------------------------------------------ *\
-	Show/submit methods
+	Show/submit methods for task/activity modification (add&edit)
 \* ------------------------------------------------------------------------ */
+
+oJobSchEd.oModTask = new Object();
 
 /* ------------------------------------------------------------------------ *\
 	Show/build add task window
 \* ------------------------------------------------------------------------ */
-oJobSchEd.showAddTaskWindow = function(intPersonId)
+oJobSchEd.oModTask.showAdd = function(intPersonId)
 {
-	var msg = this.oMsgTask;
+	var msg = this.oMsg;
 	
 	// show form
 	msg.repositionMsgCenter();
-	this.oNewTask = new Object();
+	this.oParent.oNewTask = new Object();
 	
 	// persons labels
 	var oPersonLbls = new Array();
-	for (var i=0; i<this.arrPersons.length; i++)
+	for (var i=0; i<this.oParent.arrPersons.length; i++)
 	{
 		oPersonLbls[oPersonLbls.length] = {
-			value	: this.arrPersons[i].intId,
-			lbl		: this.arrPersons[i].strName
+			value	: this.oParent.arrPersons[i].intId,
+			lbl		: this.oParent.arrPersons[i].strName
 		};
 	}
 	// activities labels
 	var oActivityLbls = new Array();
-	for (var i=0; i<this.lang.activities.length; i++)
+	for (var i=0; i<this.oParent.lang.activities.length; i++)
 	{
 		oActivityLbls[oActivityLbls.length] = {
 			value	: i,
-			lbl		: this.lang.activities[i].name
+			lbl		: this.oParent.lang.activities[i].name
 		};
 	}
 	// defaults
-	this.oNewTask.intPersonId = (typeof(intPersonId)=='undefined' ? oPersonLbls[0].value : intPersonId);
-	this.oNewTask.intActivityId = oActivityLbls[0].value;
+	this.oParent.oNewTask.intPersonId = (typeof(intPersonId)=='undefined' ? oPersonLbls[0].value : intPersonId);
+	this.oParent.oNewTask.intActivityId = oActivityLbls[0].value;
 	var now = new Date();
-	this.oNewTask.strDateStart = now.dateFormat(this.conf.strFormat);
-	this.oNewTask.strDateEnd = now.dateFormat(this.conf.strFormat);
+	this.oParent.oNewTask.strDateStart = now.dateFormat(this.oParent.conf.strFormat);
+	this.oParent.oNewTask.strDateEnd = now.dateFormat(this.oParent.conf.strFormat);
 	// fields setup
 	var arrFields = [
-		{type:'select', title: this.lang['label - person'], lbls : oPersonLbls, value:this.oNewTask.intPersonId, jsUpdate:'oJobSchEd.oNewTask.intPersonId = this.value'},
-		{type:'select', title: this.lang['label - activity'], lbls : oActivityLbls, value:this.oNewTask.intActivityId, jsUpdate:'oJobSchEd.oNewTask.intActivityId = this.value'},
-		{type:'text', maxlen: 10, lbl: this.lang['label - date start'], value:this.oNewTask.strDateStart, jsUpdate:'oJobSchEd.oNewTask.strDateStart = this.value'},
-		{type:'text', maxlen: 10, lbl: this.lang['label - date end'], value:this.oNewTask.strDateEnd, jsUpdate:'oJobSchEd.oNewTask.strDateEnd = this.value'}
+		{type:'select', title: this.oParent.lang['label - person'], lbls : oPersonLbls, value:this.oParent.oNewTask.intPersonId, jsUpdate:'oJobSchEd.oNewTask.intPersonId = this.value'},
+		{type:'select', title: this.oParent.lang['label - activity'], lbls : oActivityLbls, value:this.oParent.oNewTask.intActivityId, jsUpdate:'oJobSchEd.oNewTask.intActivityId = this.value'},
+		{type:'text', maxlen: 10, lbl: this.oParent.lang['label - date start'], value:this.oParent.oNewTask.strDateStart, jsUpdate:'oJobSchEd.oNewTask.strDateStart = this.value'},
+		{type:'text', maxlen: 10, lbl: this.oParent.lang['label - date end'], value:this.oParent.oNewTask.strDateEnd, jsUpdate:'oJobSchEd.oNewTask.strDateEnd = this.value'}
 	]
-	var strHTML = this.createForm(arrFields, this.lang['form header - add']);
-	msg.show(strHTML, 'oJobSchEd.submitAddTaskWindow()');
+	var strHTML = this.oParent.createForm(arrFields, this.oParent.lang['form header - add']);
+	msg.show(strHTML, 'oJobSchEd.oModTask.submitAdd()');
 }
 
 /* ------------------------------------------------------------------------ *\
@@ -53,30 +55,42 @@ oJobSchEd.showAddTaskWindow = function(intPersonId)
 	
 	TODO: some validation of dates?
 \* ------------------------------------------------------------------------ */
-oJobSchEd.submitAddTaskWindow = function()
+oJobSchEd.oModTask.submitAdd = function()
 {
 	// data parse
-	this.oNewTask.intPersonId = parseInt(this.oNewTask.intPersonId);
-	this.oNewTask.intActivityId = parseInt(this.oNewTask.intActivityId);
-	var intP = this.indexOfPerson(this.oNewTask.intPersonId)
+	this.oParent.oNewTask.intPersonId = parseInt(this.oParent.oNewTask.intPersonId);
+	this.oParent.oNewTask.intActivityId = parseInt(this.oParent.oNewTask.intActivityId);
+	var intP = this.oParent.indexOfPerson(this.oParent.oNewTask.intPersonId)
 	if (intP!=-1)
 	{
-		this.oNewTask.strPersonName = this.arrPersons[intP].strName;
+		this.oParent.oNewTask.strPersonName = this.oParent.arrPersons[intP].strName;
 	}
 	else
 	{
-		jsAlert(this.lang["gantt add error - unknown person"]);
+		jsAlert(this.oParent.lang["gantt add error - unknown person"]);
 		return;
 	}
 
 	// add task
-	this.addTask (this.oNewTask);
+	this.oParent.addTask (this.oParent.oNewTask);
 	
+	// common stuff (rebuild, refresh...)
+	this.submitCommon();
+}
+
+/* ------------------------------------------------------------------------ *\
+	Common stuff done at the end of submit
+\* ------------------------------------------------------------------------ */
+oJobSchEd.oModTask.submitCommon = function()
+{
 	// build
-	var strWikicode = this.buildWikicode();
+	var strWikicode = this.oParent.buildWikicode();
 	// output
-	this.setContents(strWikicode);
+	this.oParent.setContents(strWikicode);
 	// close
-	var msg = this.oMsgTask;
-	msg.close();
+	this.oMsg.close();
+	
+	// refresh window<del>s</del>
+	//this.oParent.oListPersons.refresh();
+	this.oParent.oListAct.refresh();
 }

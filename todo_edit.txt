@@ -16,11 +16,12 @@
 ** Some cleanup
 * Dialog with a list of all persons.
 * Dialog with a list of all tasks of a person.
+* Move dialogs to subobjects.
+* Refresh methods for dialogs (run after add/edit).
 
 -----------------------
  TODO
 -----------------------
-* Refresh methods for dialogs (run after add/edit).
 * Edit dialog based on add dialog.
 * Add person dialog based on add task dialog.
 * Linking everything as on original mockups.

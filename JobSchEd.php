@@ -6,9 +6,6 @@
 	* JSWikiGantt ver. 0.3.0 or higher
 	* sftJSmsg ver 0.3.0 or higher
  
-	Description:
-	-
- 
     Copyright:  ©2010 Maciej Jaros (pl:User:Nux, en:User:EcceNux)
  
 	To activate this extension, add the following into your LocalSettings.php file:
@@ -34,7 +31,7 @@ if( !defined( 'MEDIAWIKI' ) ) {
 $wgExtensionCredits['parserhook'][] = array(
 	'path'         => __FILE__,
 	'name'         => 'JobSchEd',
-	'version'      => '0.2.0',
+	'version'      => '0.2.1',
 	'author'       => 'Maciej Jaros', 
 	'url'          => 'http://www.mediawiki.org/wiki/Extension:JobSchEd',
 	'description'  => ''

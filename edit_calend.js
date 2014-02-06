@@ -14,7 +14,7 @@
                 http://opensource.org/licenses/gpl-license.php
 \* ------------------------------------------------------------------------ */
 //  wersja:
-	var tmp_VERSION = '0.2.0';  // = oJobSchEd.version = oJobSchEd.ver
+	var tmp_VERSION = '0.2.1';  // = oJobSchEd.version = oJobSchEd.ver
 // ------------------------------------------------------------------------ //
 
 /* =====================================================
@@ -71,7 +71,8 @@ oJobSchEd.init = function()
 	msg.showCancel = true;
 	msg.autoOKClose = false;
 	msg.createRegularForm = false;
-	this.oMsgTask = msg;	
+	this.oModTask.oMsg = msg;
+	this.oModTask.oParent = this;
 
 	// persons list
 	var msg = new sftJSmsg();
@@ -81,7 +82,8 @@ oJobSchEd.init = function()
 	msg.showCancel = false;
 	msg.lang['OK'] = this.lang["close button label"];
 	msg.createRegularForm = false;
-	this.oMsgListPersons = msg;	
+	this.oListPersons.oMsg = msg;
+	this.oListPersons.oParent = this;
 
 	// tasks of a person list
 	var msg = new sftJSmsg();
@@ -91,7 +93,8 @@ oJobSchEd.init = function()
 	msg.showCancel = false;
 	msg.lang['OK'] = this.lang["close button label"];
 	msg.createRegularForm = false;
-	this.oMsgListTasks = msg;	
+	this.oListAct.oMsg = msg;
+	this.oListAct.oParent = this;
 }
 if (wgAction=="edit" || wgAction=="submit")
 {
@@ -134,7 +137,7 @@ oJobSchEd.startEditor = function()
 	}
 
 	// main editor's window - list persons
-	this.showListPersonsWindow();
+	this.oListPersons.show();
 }
 
 /* ------------------------------------------------------------------------ *\
