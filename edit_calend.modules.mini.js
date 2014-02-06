@@ -2,7 +2,7 @@
 // _core, line#0
 
 // EOC@line#16
-	var tmp_VERSION = '0.6.2';
+	var tmp_VERSION = '0.6.3';
 // EOC@line#22
 if (oJobSchEd!=undefined)
 {

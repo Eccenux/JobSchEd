@@ -35,32 +35,17 @@
 ** remove in-line comments
 ** remove vertical whitespace from EOL
 * Correction of file change check.
+* Lower memory load in loader - use fopen and fwrite rather then operating on the same string
 * Loader returns a file name rather then adding a head item (+some clean up in variables)
+* Inline comments evil code fix
+* Loader tester
 
 -----------------------
  TODO
 -----------------------
-* Lower memory load in loader - use fopen and fwrite rather then operating on the same string
 
 -----------------------
  Someday...
 -----------------------
 * Sort task by start date upon build/on demand?
 * Person select set to read-only?
-
------------------------
-THE LOADER CHECK:
------------------------
-	// simple
-	var z = ""+
-		"djfhjshd // test"
-	;
-	// evil
-	var x = /a"aa\/\/asa/ " \
-	//\
-	";
-	var x = /aa\/*a*/;
-	// a bit evil
-	var x = /aa\/*a*/
-	;
-	

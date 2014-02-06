@@ -108,7 +108,7 @@ class ecSimpleJSLoader
 		// remove in-line comments without removing any horizontal whitespace
 		if ($this->isRemoveInlineComments)
 		{
-			$strCode = preg_replace("#[ \t]*\//[^\"\n]*[^\\\"\n](?=\n)#", '', $strCode);
+			$strCode = preg_replace("#[ \t]*\//[^\"\n]*[^\\\\\"\n](?=\n)#", '', $strCode);
 		}
 		
 		// remove vertical whitespace from EOL

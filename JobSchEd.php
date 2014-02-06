@@ -33,7 +33,7 @@ if( !defined( 'MEDIAWIKI' ) ) {
 $wgExtensionCredits['parserhook'][] = array(
 	'path'         => __FILE__,
 	'name'         => 'JobSchEd',
-	'version'      => '0.6.2',
+	'version'      => '0.6.3',
 	'author'       => 'Maciej Jaros', 
 	'url'          => 'http://www.mediawiki.org/wiki/Extension:JobSchEd',
 	'description'  => ''
@@ -67,7 +67,7 @@ function efJobSchEdSetup($wgOut)
 	$oLoader = new ecSimpleJSLoader($wgJobSchEdDir);
 	
 	// "modules"
-	$strMiniModulesFile = $oLoader->loadModules(array(
+	$strMiniModulesFile = $oLoader->createMiniModules(array(
 		'_core',
 		'form_cr',
 		'parsing',
