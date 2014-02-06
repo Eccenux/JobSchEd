@@ -1,5 +1,4 @@
-﻿// <nowiki>
-/* ------------------------------------------------------------------------ *\
+﻿/* ------------------------------------------------------------------------ *\
 	Task class module
 	
 	Basic attributes of the object:
@@ -11,10 +10,9 @@
 		intActivityId	: numeric index in this.lang.activities
 	}
 \* ------------------------------------------------------------------------ */
+
 /* ------------------------------------------------------------------------ *\
 	Constructor
-	
-	It's done this way as new oJobSchEd.oTask() don't seem to work...
 \* ------------------------------------------------------------------------ */
 function cJobSchEdTask(oTaskStartValues)
 {
@@ -25,4 +23,3 @@ function cJobSchEdTask(oTaskStartValues)
 	this.strDateEnd = (typeof(oTaskStartValues.strDateEnd)=='undefined' ? '' : oTaskStartValues.strDateEnd);
 	this.intActivityId = (typeof(oTaskStartValues.intActivityId)=='undefined' ? -1 : oTaskStartValues.intActivityId);
 }
-// </nowiki>

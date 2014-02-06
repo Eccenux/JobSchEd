@@ -9,9 +9,9 @@
 * Fix for select inputs (values were not updated)
 * Task class? Could use something like new this.oTask() and some methods might be moved...;
 ** Not really working... Moving oTask idea to cJobSchEdTask prototype.
+** Moved methods to different files for easier editing...
 
 TODO:
-** Move methods to the class
 ** Change current usage of loose objects to class instances usage
 * Dialog with a list of all persons.
 * Dialog with a list of all tasks of a person.
