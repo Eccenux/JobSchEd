@@ -17,7 +17,6 @@ oJobSchEd.oListAct.show = function(intPersonId)
 	this.intLastPersonId = intPersonId;
 	
 	// tasks list
-	var strList = '<ul style="text-align:left">';
 	var i = this.oParent.indexOfPerson(intPersonId);
 	// unexpected error (person should be known)
 	if (i<0)
@@ -25,6 +24,8 @@ oJobSchEd.oListAct.show = function(intPersonId)
 		return;
 	}
 	var oP = this.oParent.arrPersons[i];
+	var strList = '<h2>'+oP.strName+'</h2>';
+	strList += '<ul style="text-align:left">';
 	for (var j=0; j<oP.arrActivities.length; j++)
 	{
 		var oA = oP.arrActivities[j]
@@ -37,6 +38,14 @@ oJobSchEd.oListAct.show = function(intPersonId)
 				+'<a href="javascript:oJobSchEd.oModTask.showEdit('+oP.intId.toString()+', '+j.toString()+')">'
 					+oA.strDateStart+" - "+oA.strDateEnd
 					+": "+this.oParent.lang.activities[oA.intId].name
+					+' '
+					+'<img src="'+this.oParent.conf['img - edit']+'" alt=" " />'
+				+'</a>'
+				+' '
+				+'<a href="javascript:oJobSchEd.oModTask.showDel('+oP.intId.toString()+', '+j.toString()+')">'
+					+'<img src="'+this.oParent.conf['img - del']+'" alt="'
+						+this.oParent.lang['alt - del']
+					+'" />'
 				+'</a>'
 			+'</li>'
 		;

@@ -24,11 +24,11 @@
 * Add person dialog based on add task dialog.
 * Edit person dialog.
 * Reposition cleanup (needs new version of sftJSmsg to work as planned)
+* Look&feel more like on original mockups (+images).
 
 -----------------------
  TODO
 -----------------------
-* Linking everything as on original mockups (+images).
 * Delete task method.
 * Delete person method.
 * Refresh of fields problem (they are filled with previous values upon add => out of sync with oNewTask => unexpected)

@@ -14,7 +14,7 @@
                 http://opensource.org/licenses/gpl-license.php
 \* ------------------------------------------------------------------------ */
 //  wersja:
-	var tmp_VERSION = '0.4.1';  // = oJobSchEd.version = oJobSchEd.ver
+	var tmp_VERSION = '0.4.2';  // = oJobSchEd.version = oJobSchEd.ver
 // ------------------------------------------------------------------------ //
 
 /* =====================================================
@@ -33,6 +33,9 @@ oJobSchEd.conf = {"":""
 	,isActivitiesIdentfiedByName : true	// Allows colors to be different then in the setup.
 										// Note that colors will be changed upon output to those setup below.
 	// allowed gantt tags? -> error when unsupported tags are found (to avoid editing non-JobSch diagrams)
+	,"img - edit" : 'extensions/JobSchEd/img/edit.png'
+	,"img - list" : 'extensions/JobSchEd/img/list.png'
+	,"img - del" : 'extensions/JobSchEd/img/del.png'
 }
 oJobSchEd.lang = {"":""
 	,"button label" : "Edytuj kalendarz"
@@ -45,13 +48,15 @@ oJobSchEd.lang = {"":""
 	,"gantt add error - unknown person" : "Błąd! Wybrana osoba nie została znaleziona. Czy na pewno dodałeś(-aś) ją wcześniej?"
 	,"form header - add" : "Dodaj wpis"
 	,"form header - edit" : "Edytuj wpis"
+	,"list header - persons" : "Wybierz osobę"
 	,"label - person" : "Osoba"
 	,"label - activity" : "Typ"
 	,"label - date start" : "Początek"
 	,"label - date end" : "Koniec"
 	,"label - new activity" : "dodaj wpis"
 	,"label - new person" : "dodaj osobę"
-	,"alt - mod person" : "Zmień"
+	,"alt - mod" : "Zmień"
+	,"alt - del" : "Usuń"
 	,"close button label" : "Zamknij"
 	,"activities" : [
 		{name: "Urlop", color:"00cc00"},

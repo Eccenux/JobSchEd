@@ -10,7 +10,8 @@ oJobSchEd.oListPersons = new Object();
 oJobSchEd.oListPersons.show = function()
 {
 	// persons list
-	var strList = '<ul style="text-align:left">';
+	var strList = '<h2>'+this.oParent.lang["list header - persons"]+'</h2>';
+	strList += '<ul style="text-align:left">';
 	for (var i=0; i<this.oParent.arrPersons.length; i++)
 	{
 		var oP = this.oParent.arrPersons[i];
@@ -18,11 +19,19 @@ oJobSchEd.oListPersons.show = function()
 			+'<li>'
 				+'<a href="javascript:oJobSchEd.oListAct.show('+oP.intId.toString()+')">'
 					+oP.strName
+					+' '
+					+'<img src="'+this.oParent.conf['img - list']+'" alt=" " />'
 				+'</a>'
 				+' '
 				+'<a href="javascript:oJobSchEd.oModPerson.showEdit('+oP.intId.toString()+')">'
-					+'<img src="" alt="'
-						+this.oParent.lang['alt - mod person']
+					+'<img src="'+this.oParent.conf['img - edit']+'" alt="'
+						+this.oParent.lang['alt - mod']
+					+'" />'
+				+'</a>'
+				+' '
+				+'<a href="javascript:oJobSchEd.oModPerson.showDel('+oP.intId.toString()+')">'
+					+'<img src="'+this.oParent.conf['img - del']+'" alt="'
+						+this.oParent.lang['alt - del']
 					+'" />'
 				+'</a>'
 			+'</li>'
