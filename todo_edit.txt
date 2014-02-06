@@ -4,9 +4,15 @@
 ** oJobSchEd.buildWikicode
 ** oJobSchEd.buildTaskcode
 * Basic add task dialog
+* Add missing labels
+* More acurate names for methods
+* Fix for select inputs (values were not updated)
+* Task class? Could use something like new this.oTask() and some methods might be moved...;
+** Not really working... Moving oTask idea to cJobSchEdTask prototype.
 
 TODO:
-* Task class? could use something like new this.oTask() and some methods might be moved...;
+** Move methods to the class
+** Change current usage of loose objects to class instances usage
 * Dialog with a list of all persons.
 * Dialog with a list of all tasks of a person.
 * Edit dialog based on add dialog.
@@ -14,3 +20,5 @@ TODO:
 * Linking everything as on original mockups.
 * Delete task method.
 * Delete person method.
+
+Someday...

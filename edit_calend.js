@@ -14,7 +14,7 @@
                 http://opensource.org/licenses/gpl-license.php
 \* ------------------------------------------------------------------------ */
 //  wersja:
-	var tmp_VERSION = '0.0.3';  // = oJobSchEd.version = oJobSchEd.ver
+	var tmp_VERSION = '0.0.4';  // = oJobSchEd.version = oJobSchEd.ver
 // ------------------------------------------------------------------------ //
 
 /* =====================================================
@@ -43,6 +43,11 @@ oJobSchEd.lang = {"":""
 	,"gantt parse error - unknow activity" : "Błąd! Nieznana aktywność (nazwa: %pRes%, kolor: %pColor%). Ten diagram nie jest kalendarzem, albo są w nim błędy."
 	,"gantt build error - at task" : "Błąd budowania wiki-kodu przy zadaniu o id %pID% (nazwa: %pName%).\nBłąd: %errDesc%."
 	,"gantt add error - unknown person" : "Błąd! Wybrana osoba nie została znaleziona. Czy na pewno dodałeś(-aś) ją wcześniej?"
+	,"form header - add" : "Dodaj wpis"
+	,"label - person" : "Osoba"
+	,"label - activity" : "Typ"
+	,"label - date start" : "Początek"
+	,"label - date end" : "Koniec"
 	,"activities" : [
 		{name: "Urlop", color:"00cc00"},
 		{name: "Delegacja", color:"0000cc"},
@@ -82,16 +87,16 @@ oJobSchEd.addEdButton = function()
 	}
 	
 	var nel = document.createElement('a');
-	nel.href = "javascript:oJobSchEd.startEdit()";
+	nel.href = "javascript:oJobSchEd.startEditor()";
 	nel.style.cssText = "float:right";
 	nel.appendChild(document.createTextNode(this.lang["button label"]));
 	elTB.appendChild(nel);
 }
 
 /* ------------------------------------------------------------------------ *\
-	Init internal structures and show edit window
+	Init internal structures and show the main editor's window
 \* ------------------------------------------------------------------------ */
-oJobSchEd.startEdit = function()
+oJobSchEd.startEditor = function()
 {
 	var strWikicode = this.getContents();
 	if (strWikicode===false)
@@ -103,7 +108,8 @@ oJobSchEd.startEdit = function()
 		return;
 	}
 
-	this.showAddWin();
+	// tmp - add task window test
+	this.showAddTaskWindow();
 	// tmp
 	/*
 	strWikicode = this.buildWikicode();
@@ -188,7 +194,7 @@ oJobSchEd.createForm = function(arrFields, strHeader)
 				strExtra += oF.jsUpdate ? ' onchange="'+oF.jsUpdate+'" ' : '';
 				strRet += '<p>'
 					+'<span style="display:inline-block;width:120px;text-align:right;">'+oF.title+':</span>'
-					+'<select name="'+oF.name+'">'
+					+'<select name="'+oF.name+'" '+strExtra+'>'
 				;
 				for (var j=0; j<oF.lbls.length; j++)
 				{
@@ -211,9 +217,9 @@ oJobSchEd.createForm = function(arrFields, strHeader)
 }
 
 /* ------------------------------------------------------------------------ *\
-	Show/build add window
+	Show/build add task window
 \* ------------------------------------------------------------------------ */
-oJobSchEd.showAddWin = function()
+oJobSchEd.showAddTaskWindow = function()
 {
 	var msg = this.oMsg;
 	
@@ -253,15 +259,15 @@ oJobSchEd.showAddWin = function()
 		{type:'text', maxlen: 10, lbl: this.lang['label - date end'], value:this.oNewTask.strDateEnd, jsUpdate:'oJobSchEd.oNewTask.strDateEnd = this.value'}
 	]
 	var strHTML = this.createForm(arrFields, this.lang['form header - add']);
-	msg.show(strHTML, 'oJobSchEd.submitAddWindow()');
+	msg.show(strHTML, 'oJobSchEd.submitAddTaskWindow()');
 }
 
 /* ------------------------------------------------------------------------ *\
-	Submit edit window
+	Submit add task window
 	
 	TODO: some validation of dates?
 \* ------------------------------------------------------------------------ */
-oJobSchEd.submitAddWindow = function()
+oJobSchEd.submitAddTaskWindow = function()
 {
 	// data parse
 	this.oNewTask.intPersonId = parseInt(this.oNewTask.intPersonId);
