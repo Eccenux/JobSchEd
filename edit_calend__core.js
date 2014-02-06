@@ -14,7 +14,7 @@
                 http://opensource.org/licenses/gpl-license.php
 \* ------------------------------------------------------------------------ */
 //  wersja:
-	var tmp_VERSION = '0.6.3';  // = oJobSchEd.version = oJobSchEd.ver
+	var tmp_VERSION = '0.6.4';  // = oJobSchEd.version = oJobSchEd.ver
 // ------------------------------------------------------------------------ //
 
 /* =====================================================

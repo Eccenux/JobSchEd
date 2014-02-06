@@ -39,6 +39,7 @@
 * Loader returns a file name rather then adding a head item (+some clean up in variables)
 * Inline comments evil code fix
 * Loader tester
+* simpler isChanged
 
 -----------------------
  TODO

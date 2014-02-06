@@ -62,23 +62,21 @@ class ecSimpleJSLoader
 	*/
 	function isChanged($arrModules, $strOutputPath)
 	{
+		if (!file_exists($strOutputPath))
+		{
+			return true;
+		}
+		
 		$intMaxTime = 0;
-		if (file_exists($strOutputPath))
+		foreach ($arrModules as $m)
 		{
-			foreach ($arrModules as $m)
+			$intTmpTime = filemtime($this->getModulePath($m));
+			if ($intTmpTime>$intMaxTime)
 			{
-				$intTmpTime = filemtime($this->getModulePath($m));
-				if ($intTmpTime>$intMaxTime)
-				{
-					$intMaxTime = $intTmpTime;
-				}
+				$intMaxTime = $intTmpTime;
 			}
-			$intFileTime = filemtime($strOutputPath);
 		}
-		else
-		{
-			$intFileTime = $intMaxTime-1;	// always create
-		}
+		$intFileTime = filemtime($strOutputPath);
 		
 		return ($intFileTime < $intMaxTime);
 	}
