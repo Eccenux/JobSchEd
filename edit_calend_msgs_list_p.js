@@ -10,7 +10,7 @@ oJobSchEd.oListPersons = new Object();
 oJobSchEd.oListPersons.show = function()
 {
 	// persons list
-	var strList = '<h2>'+this.oParent.lang["list header - persons"]+'</h2>';
+	var strList = '<h2>'+this.oParent.lang["header - persons"]+'</h2>';
 	strList += '<ul style="text-align:left">';
 	for (var i=0; i<this.oParent.arrPersons.length; i++)
 	{

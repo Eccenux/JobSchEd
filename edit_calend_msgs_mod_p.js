@@ -1,11 +1,11 @@
 ﻿/* ------------------------------------------------------------------------ *\
-	Show/submit methods for task/activity modification (add&edit)
+	Show/submit methods for person modification (add&edit&delete)
 \* ------------------------------------------------------------------------ */
 
 oJobSchEd.oModPerson = new Object();
 
 /* ------------------------------------------------------------------------ *\
-	Show/build add task window
+	Show/build add person window
 \* ------------------------------------------------------------------------ */
 oJobSchEd.oModPerson.showAdd = function()
 {
@@ -19,7 +19,7 @@ oJobSchEd.oModPerson.showAdd = function()
 
 	// fields setup
 	var arrFields = this.getArrFields('oJobSchEd.oNewPerson');
-	var strHTML = this.oParent.createForm(arrFields, this.oParent.lang['form header - add']);
+	var strHTML = this.oParent.createForm(arrFields, this.oParent.lang['header - add']);
 
 	// show form
 	var msg = this.oMsg;
@@ -28,7 +28,7 @@ oJobSchEd.oModPerson.showAdd = function()
 }
 
 /* ------------------------------------------------------------------------ *\
-	Submit add task window
+	Submit add person window
 	
 	TODO: some validation?
 \* ------------------------------------------------------------------------ */
@@ -42,7 +42,7 @@ oJobSchEd.oModPerson.submitAdd = function()
 }
 
 /* ------------------------------------------------------------------------ *\
-	Show/build edit task window
+	Show/build edit person window
 \* ------------------------------------------------------------------------ */
 oJobSchEd.oModPerson.showEdit = function(intPersonId)
 {
@@ -54,7 +54,7 @@ oJobSchEd.oModPerson.showEdit = function(intPersonId)
 
 	// fields setup
 	var arrFields = this.getArrFields('oJobSchEd.oNewPerson');
-	var strHTML = this.oParent.createForm(arrFields, this.oParent.lang['form header - edit']);
+	var strHTML = this.oParent.createForm(arrFields, this.oParent.lang['header - edit']);
 
 	// show form
 	var msg = this.oMsg;
@@ -63,14 +63,44 @@ oJobSchEd.oModPerson.showEdit = function(intPersonId)
 }
 
 /* ------------------------------------------------------------------------ *\
-	Submit wdit task window
+	Submit edit person window
 	
 	TODO: some validation of dates?
 \* ------------------------------------------------------------------------ */
-oJobSchEd.oModPerson.submitEdit = function(intPersonId, intActIndex)
+oJobSchEd.oModPerson.submitEdit = function(intPersonId)
 {
 	// add person
 	this.oParent.setPerson (this.oParent.oNewPerson.strPersonName, intPersonId);
+
+	// common stuff (rebuild, refresh...)
+	this.submitCommon();
+}
+
+/* ------------------------------------------------------------------------ *\
+	Show/build del person window
+\* ------------------------------------------------------------------------ */
+oJobSchEd.oModPerson.showDel = function(intPersonId)
+{
+	// defaults
+	var intPer = this.oParent.indexOfPerson(intPersonId);
+
+	// fields setup
+	var strHTML = "<h2>"+this.oParent.lang['header - del']+"</h2>"
+		+ this.oParent.arrPersons[intPer].strName;
+
+	// show form
+	var msg = this.oMsg;
+	msg.show(strHTML, 'oJobSchEd.oModPerson.submitDel('+intPersonId+')');
+	msg.repositionMsgCenter();
+}
+
+/* ------------------------------------------------------------------------ *\
+	Submit del person window
+\* ------------------------------------------------------------------------ */
+oJobSchEd.oModPerson.submitDel = function(intPersonId)
+{
+	// add person
+	this.oParent.delPerson (intPersonId);
 
 	// common stuff (rebuild, refresh...)
 	this.submitCommon();

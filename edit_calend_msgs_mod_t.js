@@ -1,5 +1,5 @@
 ﻿/* ------------------------------------------------------------------------ *\
-	Show/submit methods for task/activity modification (add&edit)
+	Show/submit methods for task/activity modification (add&edit&delete)
 \* ------------------------------------------------------------------------ */
 
 oJobSchEd.oModTask = new Object();
@@ -23,7 +23,7 @@ oJobSchEd.oModTask.showAdd = function(intPersonId)
 
 	// fields setup
 	var arrFields = this.getArrFields('oJobSchEd.oNewTask');
-	var strHTML = this.oParent.createForm(arrFields, this.oParent.lang['form header - add']);
+	var strHTML = this.oParent.createForm(arrFields, this.oParent.lang['header - add']);
 
 	// show form
 	var msg = this.oMsg;
@@ -79,7 +79,7 @@ oJobSchEd.oModTask.showEdit = function(intPersonId, intActIndex)
 
 	// fields setup
 	var arrFields = this.getArrFields('oJobSchEd.oNewTask');
-	var strHTML = this.oParent.createForm(arrFields, this.oParent.lang['form header - edit']);
+	var strHTML = this.oParent.createForm(arrFields, this.oParent.lang['header - edit']);
 
 	// show form
 	var msg = this.oMsg;
@@ -88,7 +88,7 @@ oJobSchEd.oModTask.showEdit = function(intPersonId, intActIndex)
 }
 
 /* ------------------------------------------------------------------------ *\
-	Submit wdit task window
+	Submit edit task window
 	
 	TODO: some validation of dates?
 \* ------------------------------------------------------------------------ */
@@ -121,6 +121,39 @@ oJobSchEd.oModTask.submitEdit = function(intPersonId, intActIndex)
 		this.oParent.addTask (oNewTask);
 	}
 	
+	// common stuff (rebuild, refresh...)
+	this.submitCommon();
+}
+
+/* ------------------------------------------------------------------------ *\
+	Show/build del task window
+\* ------------------------------------------------------------------------ */
+oJobSchEd.oModTask.showDel = function(intPersonId, intActIndex)
+{
+	// defaults
+	var intPer = this.oParent.indexOfPerson(intPersonId);
+	var oA = this.oParent.arrPersons[intPer].arrActivities[intActIndex];
+
+	// fields setup
+	var strHTML = "<h2>"+this.oParent.lang['header - del']+"</h2>"
+		+oA.strDateStart+" - "+oA.strDateEnd
+		+": "+this.oParent.lang.activities[oA.intId].name
+	;
+
+	// show form
+	var msg = this.oMsg;
+	msg.show(strHTML, 'oJobSchEd.oModTask.submitDel('+intPersonId+', '+intActIndex+')');
+	msg.repositionMsgCenter();
+}
+
+/* ------------------------------------------------------------------------ *\
+	Submit del task window
+\* ------------------------------------------------------------------------ */
+oJobSchEd.oModTask.submitDel = function(intPersonId, intActIndex)
+{
+	// add person
+	this.oParent.delTask (intPersonId, intActIndex);
+
 	// common stuff (rebuild, refresh...)
 	this.submitCommon();
 }

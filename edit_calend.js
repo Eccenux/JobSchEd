@@ -14,7 +14,7 @@
                 http://opensource.org/licenses/gpl-license.php
 \* ------------------------------------------------------------------------ */
 //  wersja:
-	var tmp_VERSION = '0.4.2';  // = oJobSchEd.version = oJobSchEd.ver
+	var tmp_VERSION = '0.5.0';  // = oJobSchEd.version = oJobSchEd.ver
 // ------------------------------------------------------------------------ //
 
 /* =====================================================
@@ -46,9 +46,10 @@ oJobSchEd.lang = {"":""
 	,"gantt parse error - unknow activity" : "Błąd! Nieznana aktywność (nazwa: %pRes%, kolor: %pColor%). Ten diagram nie jest kalendarzem, albo są w nim błędy."
 	,"gantt build error - at task" : "Błąd budowania wiki-kodu przy zadaniu o id %pID% (nazwa: %pName%).\nBłąd: %errDesc%."
 	,"gantt add error - unknown person" : "Błąd! Wybrana osoba nie została znaleziona. Czy na pewno dodałeś(-aś) ją wcześniej?"
-	,"form header - add" : "Dodaj wpis"
-	,"form header - edit" : "Edytuj wpis"
-	,"list header - persons" : "Wybierz osobę"
+	,"header - add" : "Dodaj wpis"
+	,"header - edit" : "Edytuj wpis"
+	,"header - persons" : "Wybierz osobę"
+	,"header - del" : "Czy na pewno chcesz usunąć?"
 	,"label - person" : "Osoba"
 	,"label - activity" : "Typ"
 	,"label - date start" : "Początek"
@@ -168,7 +169,7 @@ oJobSchEd.indexOfPerson = function(intPersonId)
 {
 	for (var i=0; i<this.arrPersons.length; i++)
 	{
-		if (this.arrPersons[i].intId==intPersonId)
+		if (this.arrPersons[i] && this.arrPersons[i].intId==intPersonId)
 		{
 			return i;
 		}
@@ -290,6 +291,53 @@ oJobSchEd.delTask = function(intPersonId, intActIndex)
 	// remove activity
 	this.arrPersons[intPer].arrActivities[intActIndex] = undefined;
 	return true;
+}
+
+/* ------------------------------------------------------------------------ *\
+	Remove person from the internal persons array
+\* ------------------------------------------------------------------------ */
+oJobSchEd.delPerson = function(intPersonId)
+{
+	var intPer = this.indexOfPerson (intPersonId);
+	// person not found?
+	if (intPer==-1)
+	{
+		return false;
+	}
+	// remove
+	this.arrPersons[intPer] = undefined;
+	// reindex to remove undefines
+	this.arrPersons.myReIndexArray()
+	return true;
+}
+
+/* ------------------------------------------------------------------------ *\
+	Reindex array with undefined values
+\* ------------------------------------------------------------------------ */
+Array.prototype.myReIndexArray = function()
+{
+	for (var i=0; i<this.length; i++)
+	{
+		if (this[i]==undefined)
+		{
+			// search for defined...
+			for (var j=i; j<this.length; j++)
+			{
+				if (this[j]==undefined)
+				{
+					continue;
+				}
+				this[i]=this[j];
+				this[j]=undefined;
+				break;
+			}
+		}
+	}
+	// fix length
+	while (this.length > 0 && this[this.length-1] == undefined)
+	{
+		this.length--;
+	}
 }
 
 // </nowiki>

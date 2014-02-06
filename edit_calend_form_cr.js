@@ -26,6 +26,11 @@ oJobSchEd.createForm = function(arrFields, strHeader)
 		{
 			oF.value = '';
 		}
+		if (typeof(oF.name)=='undefined')
+		{
+			var now = new Date();
+			oF.name = 'undefined_'+now.getTime();
+		}
 		switch (oF.type)
 		{
 			default:

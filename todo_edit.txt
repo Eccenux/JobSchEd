@@ -7,45 +7,45 @@
 ** oJobSchEd.buildTaskcode
 * Basic add task dialog
 * Add missing labels
-* More acurate names for methods
+* More accurate names for methods
 * Fix for select inputs (values were not updated)
 * Task class? Could use something like new this.oTask() and some methods might be moved...;
 ** Not really working... Moving oTask idea to cJobSchEdTask prototype.
 ** Moved methods to different files for easier editing...
 ** <del>Change current usage of loose objects to class instances usage</del> - not really needed...
-** Some cleanup
-* Dialog with a list of all persons.
-* Dialog with a list of all tasks of a person.
-* Move dialogs to subobjects.
-* Refresh methods for dialogs (run after add/edit).
+** Some clean up
+* Dialogue with a list of all persons.
+* Dialogue with a list of all tasks of a person.
+* Move dialogues to subobjects.
+* Refresh methods for dialogues (run after add/edit).
 * Common from Add moved out...
-* Edit dialog based on add dialog.
-* Support changing persons in edit dialog.
-* Add person dialog based on add task dialog.
-* Edit person dialog.
-* Reposition cleanup (needs new version of sftJSmsg to work as planned)
+* Edit dialogue based on add dialogue.
+* Support changing persons in edit dialogue.
+* Add person dialogue based on add task dialogue.
+* Edit person dialogue.
+* Reposition clean up (needs new version of sftJSmsg to work as planned)
 * Look&feel more like on original mockups (+images).
+* Delete task methods.
+* Delete person methods.
+* Refresh of fields problem (they are filled with previous values upon add => out of sync with oNewTask => unexpected)
 
 -----------------------
  TODO
 -----------------------
-* Delete task method.
-* Delete person method.
-* Refresh of fields problem (they are filled with previous values upon add => out of sync with oNewTask => unexpected)
+* Use the loader or simply combine "modules" into one file...
+** Own loader would:
+*** remove in-line comments without removing any whitespace (might be troublesome... e.g. "djfhjshd // test").
+*** remove multi-line comments but adding an in-line comment with the original line number of the end of the comment ("// EOC@line#X").
+*** add an in-line comment with the original file name at the begging ("// FileName.js, line#0") and the end of the file ("// FileName.js, EOF").
+*** add modified files to a single file
+*** check if any of the files was modified and serve cached file if not (mod check by cached file date)
+*** "FileName" shown in the combined file as not a real name (rather a name of a module)
 
 -----------------------
  Someday...
 -----------------------
+* Sort task by start date upon build/on demand?
 * Person select set to read-only?
-* Sort task by start date upon build?
-* Use the loader or simply combain "modules" into one file...
-** Own loader would:
-*** remove inline comments without removing any whitespace (might be troublesome... e.g. "djfhjshd // test").
-*** remove multiline comments but adding an inline comment with the original line number of the end of the comment ("// EOC@line#X").
-*** add an inline comment with the original file name at the begging ("// FileName.js, line#0") and the end of the file ("// FileName.js, EOF").
-*** add modified files to a single file
-*** check if any of the files was modified and serve cached file if not (mod check by cached file date)
-*** "FileName" shown in the combined file as not a real name (rather a name of a module)
 
 -----------------------
 THE LOADER CHECK:
@@ -53,7 +53,7 @@ THE LOADER CHECK:
 	var z = ""+
 		"djfhjshd // test"
 	;
-	var x = /a"aa\/\/a"sa/ " \
+	var x = /a"aa\/\/asa/ " \
 	//\
 	";
-	var x = /aaa*/;
+	var x = /aa\/*a*/;
