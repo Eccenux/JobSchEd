@@ -29,12 +29,17 @@ oJobSchEd.oListAct.show = function(intPersonId)
 	{
 		return;
 	}
-	for (var j=0; j<this.oParent.arrPersons[i].arrActivities.length; j++)
+	var oP = this.oParent.arrPersons[i];
+	for (var j=0; j<oP.arrActivities.length; j++)
 	{
-		var oA = this.oParent.arrPersons[i].arrActivities[j]
+		var oA = oP.arrActivities[j]
+		if (typeof(oA)=='undefined')	// might be empty after del
+		{
+			continue;
+		}
 		strList += ''
 			+'<li>'
-				+'<a href="javascript:oJobSchEd.oModTask.showEdit('+oA.intId.toString()+')">'
+				+'<a href="javascript:oJobSchEd.oModTask.showEdit('+oP.intId.toString()+', '+j.toString()+')">'
 					+oA.strDateStart+" - "+oA.strDateEnd
 					+": "+this.oParent.lang.activities[oA.intId].name
 				+'</a>'
@@ -43,7 +48,7 @@ oJobSchEd.oListAct.show = function(intPersonId)
 	}
 	strList += ''
 		+'<li>'
-			+'<a href="javascript:oJobSchEd.oModTask.showAdd('+this.oParent.arrPersons[i].intId.toString()+')">'
+			+'<a href="javascript:oJobSchEd.oModTask.showAdd('+oP.intId.toString()+')">'
 				+this.oParent.lang['label - new activity']
 			+'</a>'
 		+'</li>'

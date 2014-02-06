@@ -18,19 +18,24 @@
 * Dialog with a list of all tasks of a person.
 * Move dialogs to subobjects.
 * Refresh methods for dialogs (run after add/edit).
+* Common from Add moved out...
+* Edit dialog based on add dialog.
+* Support changing persons in edit dialog.
 
 -----------------------
  TODO
 -----------------------
-* Edit dialog based on add dialog.
 * Add person dialog based on add task dialog.
 * Linking everything as on original mockups.
 * Delete task method.
 * Delete person method.
+* Refresh of fields problem (they are filled with previous values upon add => out of sync with oNewTask => unexpected)
 
 -----------------------
  Someday...
 -----------------------
+* Person select set to read-only?
+* Sort task by start date upon build?
 * Use the loader or simply combain "modules" into one file...
 ** Own loader would:
 *** remove inline comments without removing any whitespace (might be troublesome... e.g. "djfhjshd // test").

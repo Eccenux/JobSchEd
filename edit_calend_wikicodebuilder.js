@@ -35,6 +35,10 @@ oJobSchEd.buildWikicode = function()
 	{
 		for (var j=0; j<this.arrPersons[i].arrActivities.length; j++)
 		{
+			if (typeof(this.arrPersons[i].arrActivities[j])=='undefined')	// might be empty after del
+			{
+				continue;
+			}
 			// preapre task object
 			var oTask =
 				{

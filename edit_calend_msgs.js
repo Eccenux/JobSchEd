@@ -11,43 +11,25 @@ oJobSchEd.oModTask.showAdd = function(intPersonId)
 {
 	var msg = this.oMsg;
 	
-	// show form
-	msg.repositionMsgCenter();
-	this.oParent.oNewTask = new Object();
+	// get/build activities and persons lables
+	this.buildLabels();
 	
-	// persons labels
-	var oPersonLbls = new Array();
-	for (var i=0; i<this.oParent.arrPersons.length; i++)
-	{
-		oPersonLbls[oPersonLbls.length] = {
-			value	: this.oParent.arrPersons[i].intId,
-			lbl		: this.oParent.arrPersons[i].strName
-		};
-	}
-	// activities labels
-	var oActivityLbls = new Array();
-	for (var i=0; i<this.oParent.lang.activities.length; i++)
-	{
-		oActivityLbls[oActivityLbls.length] = {
-			value	: i,
-			lbl		: this.oParent.lang.activities[i].name
-		};
-	}
 	// defaults
-	this.oParent.oNewTask.intPersonId = (typeof(intPersonId)=='undefined' ? oPersonLbls[0].value : intPersonId);
-	this.oParent.oNewTask.intActivityId = oActivityLbls[0].value;
 	var now = new Date();
-	this.oParent.oNewTask.strDateStart = now.dateFormat(this.oParent.conf.strFormat);
-	this.oParent.oNewTask.strDateEnd = now.dateFormat(this.oParent.conf.strFormat);
+	this.oParent.oNewTask = {
+		intPersonId : (typeof(intPersonId)=='undefined' ? this.arrPersonLbls[0].value : intPersonId),
+		intActivityId : this.arrActivityLbls[0].value,
+		strDateStart : now.dateFormat(this.oParent.conf.strFormat),
+		strDateEnd : now.dateFormat(this.oParent.conf.strFormat)
+	};
+
 	// fields setup
-	var arrFields = [
-		{type:'select', title: this.oParent.lang['label - person'], lbls : oPersonLbls, value:this.oParent.oNewTask.intPersonId, jsUpdate:'oJobSchEd.oNewTask.intPersonId = this.value'},
-		{type:'select', title: this.oParent.lang['label - activity'], lbls : oActivityLbls, value:this.oParent.oNewTask.intActivityId, jsUpdate:'oJobSchEd.oNewTask.intActivityId = this.value'},
-		{type:'text', maxlen: 10, lbl: this.oParent.lang['label - date start'], value:this.oParent.oNewTask.strDateStart, jsUpdate:'oJobSchEd.oNewTask.strDateStart = this.value'},
-		{type:'text', maxlen: 10, lbl: this.oParent.lang['label - date end'], value:this.oParent.oNewTask.strDateEnd, jsUpdate:'oJobSchEd.oNewTask.strDateEnd = this.value'}
-	]
+	var arrFields = this.getArrFields('oJobSchEd.oNewTask');
 	var strHTML = this.oParent.createForm(arrFields, this.oParent.lang['form header - add']);
+
+	// show form
 	msg.show(strHTML, 'oJobSchEd.oModTask.submitAdd()');
+	msg.repositionMsgCenter();
 }
 
 /* ------------------------------------------------------------------------ *\
@@ -76,6 +58,123 @@ oJobSchEd.oModTask.submitAdd = function()
 	
 	// common stuff (rebuild, refresh...)
 	this.submitCommon();
+}
+
+/* ------------------------------------------------------------------------ *\
+	Show/build edit task window
+\* ------------------------------------------------------------------------ */
+oJobSchEd.oModTask.showEdit = function(intPersonId, intActIndex)
+{
+	var msg = this.oMsg;
+	
+	// get/build activities and persons lables
+	this.buildLabels();
+	
+	// defaults
+	var intPer = this.oParent.indexOfPerson(intPersonId);
+	var oA = this.oParent.arrPersons[intPer].arrActivities[intActIndex];
+	this.oParent.oNewTask = {
+		intPersonId : intPersonId,
+		intActivityId : oA.intId,
+		strDateStart : oA.strDateStart,
+		strDateEnd : oA.strDateEnd
+	};
+
+	// fields setup
+	var arrFields = this.getArrFields('oJobSchEd.oNewTask');
+	var strHTML = this.oParent.createForm(arrFields, this.oParent.lang['form header - edit']);
+
+	// show form
+	msg.show(strHTML, 'oJobSchEd.oModTask.submitEdit('+intPersonId+', '+intActIndex+')');
+	msg.repositionMsgCenter();
+}
+
+/* ------------------------------------------------------------------------ *\
+	Submit wdit task window
+	
+	TODO: some validation of dates?
+\* ------------------------------------------------------------------------ */
+oJobSchEd.oModTask.submitEdit = function(intPersonId, intActIndex)
+{
+	var oNewTask = this.oParent.oNewTask;
+	// data parse
+	oNewTask.intPersonId = parseInt(oNewTask.intPersonId);
+	oNewTask.intActivityId = parseInt(oNewTask.intActivityId);
+	var intP = this.oParent.indexOfPerson(oNewTask.intPersonId)
+	if (intP!=-1)
+	{
+		oNewTask.strPersonName = this.oParent.arrPersons[intP].strName;
+	}
+	else
+	{
+		jsAlert(this.oParent.lang["gantt add error - unknown person"]);
+		return;
+	}
+
+	// person not changed? => simply change act.
+	if (intPersonId==oNewTask.intPersonId)
+	{
+		this.oParent.setTask (oNewTask, intPersonId, intActIndex);
+	}
+	// => remove act. from the previous person and add a new one
+	else
+	{
+		this.oParent.delTask (intPersonId, intActIndex);
+		this.oParent.addTask (oNewTask);
+	}
+	
+	// common stuff (rebuild, refresh...)
+	this.submitCommon();
+}
+
+/* ------------------------------------------------------------------------ *\
+	Build labels for this form
+\* ------------------------------------------------------------------------ */
+oJobSchEd.oModTask.buildLabels = function()
+{
+	// persons labels
+	this.arrPersonLbls = new Array();
+	for (var i=0; i<this.oParent.arrPersons.length; i++)
+	{
+		this.arrPersonLbls[this.arrPersonLbls.length] = {
+			value	: this.oParent.arrPersons[i].intId,
+			lbl		: this.oParent.arrPersons[i].strName
+		};
+	}
+	// activities labels
+	this.arrActivityLbls = new Array();
+	for (var i=0; i<this.oParent.lang.activities.length; i++)
+	{
+		this.arrActivityLbls[this.arrActivityLbls.length] = {
+			value	: i,
+			lbl		: this.oParent.lang.activities[i].name
+		};
+	}
+}
+
+/* ------------------------------------------------------------------------ *\
+	Get fields array for this form
+	
+	strNewTaskObject = 'oJobSchEd.oNewTask'
+\* ------------------------------------------------------------------------ */
+oJobSchEd.oModTask.getArrFields = function(strNewTaskObject)
+{
+	return [
+		{type:'select', title: this.oParent.lang['label - person']
+			, lbls : this.arrPersonLbls
+			, value:this.oParent.oNewTask.intPersonId
+			, jsUpdate:strNewTaskObject+'.intPersonId = this.value'},
+		{type:'select', title: this.oParent.lang['label - activity']
+			, lbls : this.arrActivityLbls
+			, value:this.oParent.oNewTask.intActivityId
+			, jsUpdate:strNewTaskObject+'.intActivityId = this.value'},
+		{type:'text', maxlen: 10, lbl: this.oParent.lang['label - date start']
+			, value:this.oParent.oNewTask.strDateStart
+			, jsUpdate:strNewTaskObject+'.strDateStart = this.value'},
+		{type:'text', maxlen: 10, lbl: this.oParent.lang['label - date end']
+			, value:this.oParent.oNewTask.strDateEnd
+			, jsUpdate:strNewTaskObject+'.strDateEnd = this.value'}
+	];
 }
 
 /* ------------------------------------------------------------------------ *\

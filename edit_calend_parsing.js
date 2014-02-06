@@ -46,32 +46,6 @@ oJobSchEd.parse = function(strWikicode)
 }
 
 /* ------------------------------------------------------------------------ *\
-	Add task to the internal persons array
-	
-	oTask is the same as in .preParseTask()
-\* ------------------------------------------------------------------------ */
-oJobSchEd.addTask = function(oTask)
-{
-	var intPer = this.indexOfPerson (oTask.intPersonId);
-	// new person?
-	if (intPer==-1)
-	{
-		intPer = this.arrPersons.length;
-		this.arrPersons[intPer] = {
-			intId : oTask.intPersonId,
-			strName : oTask.strPersonName,
-			arrActivities : new Array()
-		}
-	}
-	// add activity
-	this.arrPersons[intPer].arrActivities[this.arrPersons[intPer].arrActivities.length] = {
-		strDateStart : oTask.strDateStart,
-		strDateEnd : oTask.strDateEnd,
-		intId : oTask.intActivityId
-	}
-}
-
-/* ------------------------------------------------------------------------ *\
 	Pre parse single task/activity node
 	
 	Returns:

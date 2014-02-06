@@ -14,7 +14,7 @@
                 http://opensource.org/licenses/gpl-license.php
 \* ------------------------------------------------------------------------ */
 //  wersja:
-	var tmp_VERSION = '0.2.1';  // = oJobSchEd.version = oJobSchEd.ver
+	var tmp_VERSION = '0.3.0';  // = oJobSchEd.version = oJobSchEd.ver
 // ------------------------------------------------------------------------ //
 
 /* =====================================================
@@ -44,6 +44,7 @@ oJobSchEd.lang = {"":""
 	,"gantt build error - at task" : "Błąd budowania wiki-kodu przy zadaniu o id %pID% (nazwa: %pName%).\nBłąd: %errDesc%."
 	,"gantt add error - unknown person" : "Błąd! Wybrana osoba nie została znaleziona. Czy na pewno dodałeś(-aś) ją wcześniej?"
 	,"form header - add" : "Dodaj wpis"
+	,"form header - edit" : "Edytuj wpis"
 	,"label - person" : "Osoba"
 	,"label - activity" : "Typ"
 	,"label - date start" : "Początek"
@@ -175,6 +176,66 @@ oJobSchEd.getActivityId = function(pRes, pColor)
 		}
 	}
 	return -1;
+}
+
+/* ------------------------------------------------------------------------ *\
+	Add task to the internal persons array
+\* ------------------------------------------------------------------------ */
+oJobSchEd.addTask = function(oTask)
+{
+	var intPer = this.indexOfPerson (oTask.intPersonId);
+	// new person?
+	if (intPer==-1)
+	{
+		intPer = this.arrPersons.length;
+		this.arrPersons[intPer] = {
+			intId : oTask.intPersonId,
+			strName : oTask.strPersonName,
+			arrActivities : new Array()
+		}
+	}
+	// add activity
+	this.arrPersons[intPer].arrActivities[this.arrPersons[intPer].arrActivities.length] = {
+		strDateStart : oTask.strDateStart,
+		strDateEnd : oTask.strDateEnd,
+		intId : oTask.intActivityId
+	}
+}
+
+/* ------------------------------------------------------------------------ *\
+	Change task in the internal persons array
+\* ------------------------------------------------------------------------ */
+oJobSchEd.setTask = function(oTask, intPersonId, intActIndex)
+{
+	var intPer = this.indexOfPerson (intPersonId);
+	// person not found?
+	if (intPer==-1)
+	{
+		return false;
+	}
+	// change activity
+	this.arrPersons[intPer].arrActivities[intActIndex] = {
+		strDateStart : oTask.strDateStart,
+		strDateEnd : oTask.strDateEnd,
+		intId : oTask.intActivityId
+	}
+	return true;
+}
+
+/* ------------------------------------------------------------------------ *\
+	Remove task from the internal persons array
+\* ------------------------------------------------------------------------ */
+oJobSchEd.delTask = function(intPersonId, intActIndex)
+{
+	var intPer = this.indexOfPerson (intPersonId);
+	// person not found?
+	if (intPer==-1)
+	{
+		return false;
+	}
+	// remove activity
+	this.arrPersons[intPer].arrActivities[intActIndex] = undefined;
+	return true;
 }
 
 // </nowiki>
