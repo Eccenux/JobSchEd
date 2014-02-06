@@ -2,7 +2,7 @@
 // _core, line#0
 
 // EOC@line#16
-	var tmp_VERSION = '0.6.7';
+	var tmp_VERSION = '0.7.0';
 // EOC@line#22
 if (oJobSchEd!=undefined)
 {
@@ -12,6 +12,8 @@ var oJobSchEd = new Object();
 oJobSchEd.ver = oJobSchEd.version = tmp_VERSION;
 
 oJobSchEd.conf = {"":""
+	,isAutoAddLogged : true
+								// Note that this doesn't mean that any task is added and so diagram will be changed only if the users adds a task.
 	,strFormat : 'Y-m-d'
 	,reGantMatch : /(<jsgantt[^>]*>)([\s\S]+)(<\/jsgantt>)/
 	,isActivitiesIdentfiedByName : true
@@ -53,7 +55,7 @@ oJobSchEd.lang = {"":""
 		{name: "Choroba", color:"990000"}
 	]
 }
-// EOC@line#74
+// EOC@line#76
 oJobSchEd.init = function()
 {
 	this.addEdButton()
@@ -101,12 +103,18 @@ oJobSchEd.init = function()
 	msg.createRegularForm = false;
 	this.oListAct.oMsg = msg;
 	this.oListAct.oParent = this;
+
+
+	if (location.href.search(/[&?]jsganttautoedit=1/)>=0)
+	{
+		this.startEditor();
+	}
 }
 if (wgAction=="edit" || wgAction=="submit")
 {
 	addOnloadHook(function() {oJobSchEd.init()});
 }
-// EOC@line#130
+// EOC@line#138
 oJobSchEd.addEdButton = function()
 {
 	var elTB = document.getElementById('toolbar');
@@ -121,7 +129,7 @@ oJobSchEd.addEdButton = function()
 	nel.appendChild(document.createTextNode(this.lang["button label"]));
 	elTB.appendChild(nel);
 }
-// EOC@line#148
+// EOC@line#156
 oJobSchEd.startEditor = function()
 {
 
@@ -136,10 +144,19 @@ oJobSchEd.startEditor = function()
 		return;
 	}
 
+
+	if (this.conf.isAutoAddLogged && typeof(wgUserName)=='string' && wgUserName.length)
+	{
+		if (this.firstIdOfPersonByName(wgUserName)===false)
+		{
+			this.addPerson(wgUserName);
+		}
+	}
+
 	// main editor's window - list persons
 	this.oListPersons.show();
 }
-// EOC@line#171
+// EOC@line#188
 oJobSchEd.indexOfPerson = function(intPersonId)
 {
 	for (var i=0; i<this.arrPersons.length; i++)
@@ -151,7 +168,19 @@ oJobSchEd.indexOfPerson = function(intPersonId)
 	}
 	return -1;
 }
-// EOC@line#187
+// EOC@line#206
+oJobSchEd.firstIdOfPersonByName = function(strPersonName)
+{
+	for (var i=0; i<this.arrPersons.length; i++)
+	{
+		if (this.arrPersons[i] && this.arrPersons[i].strName==strPersonName)
+		{
+			return this.arrPersons[i].intId;
+		}
+	}
+	return false;
+}
+// EOC@line#222
 oJobSchEd.getActivityId = function(pRes, pColor)
 {
 	//"activities"
@@ -167,7 +196,7 @@ oJobSchEd.getActivityId = function(pRes, pColor)
 	}
 	return -1;
 }
-// EOC@line#206
+// EOC@line#241
 oJobSchEd.addTask = function(oTask)
 {
 	var intPer = this.indexOfPerson (oTask.intPersonId);
@@ -188,7 +217,7 @@ oJobSchEd.addTask = function(oTask)
 		intId : oTask.intActivityId
 	}
 }
-// EOC@line#230
+// EOC@line#265
 oJobSchEd.addPerson = function(strPersonName)
 {
 	var intPer = this.arrPersons.length;
@@ -206,7 +235,7 @@ oJobSchEd.addPerson = function(strPersonName)
 		arrActivities : new Array()
 	}
 }
-// EOC@line#251
+// EOC@line#286
 oJobSchEd.setTask = function(oTask, intPersonId, intActIndex)
 {
 	var intPer = this.indexOfPerson (intPersonId);
@@ -223,7 +252,7 @@ oJobSchEd.setTask = function(oTask, intPersonId, intActIndex)
 	}
 	return true;
 }
-// EOC@line#271
+// EOC@line#306
 oJobSchEd.setPerson = function(strPersonName, intPersonId)
 {
 	var intPer = this.indexOfPerson (intPersonId);
@@ -236,7 +265,7 @@ oJobSchEd.setPerson = function(strPersonName, intPersonId)
 	this.arrPersons[intPer].strName = strPersonName;
 	return true;
 }
-// EOC@line#287
+// EOC@line#322
 oJobSchEd.delTask = function(intPersonId, intActIndex)
 {
 	var intPer = this.indexOfPerson (intPersonId);
@@ -249,7 +278,7 @@ oJobSchEd.delTask = function(intPersonId, intActIndex)
 	this.arrPersons[intPer].arrActivities[intActIndex] = undefined;
 	return true;
 }
-// EOC@line#303
+// EOC@line#338
 oJobSchEd.delPerson = function(intPersonId)
 {
 	var intPer = this.indexOfPerson (intPersonId);
@@ -264,7 +293,7 @@ oJobSchEd.delPerson = function(intPersonId)
 	this.arrPersons.myReIndexArray()
 	return true;
 }
-// EOC@line#321
+// EOC@line#356
 Array.prototype.myReIndexArray = function()
 {
 	for (var i=0; i<this.length; i++)

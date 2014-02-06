@@ -9,12 +9,12 @@
 	Description:
 	-
  
-    Copyright:  ©2010 Maciej Jaros (pl:User:Nux, en:User:EcceNux)
+    Copyright:  ©2010-2011 Maciej Jaros (pl:User:Nux, en:User:EcceNux)
      Licencja:  GNU General Public License v2
                 http://opensource.org/licenses/gpl-license.php
 \* ------------------------------------------------------------------------ */
 //  wersja:
-	var tmp_VERSION = '0.6.7';  // = oJobSchEd.version = oJobSchEd.ver
+	var tmp_VERSION = '0.7.0';  // = oJobSchEd.version = oJobSchEd.ver
 // ------------------------------------------------------------------------ //
 
 /* =====================================================
@@ -28,6 +28,8 @@ var oJobSchEd = new Object();
 oJobSchEd.ver = oJobSchEd.version = tmp_VERSION;
 
 oJobSchEd.conf = {"":""
+	,isAutoAddLogged : true		// Automatically adds a logged in person if login is not found
+								// Note that this doesn't mean that any task is added and so diagram will be changed only if the users adds a task.
 	,strFormat : 'Y-m-d'
 	,reGantMatch : /(<jsgantt[^>]*>)([\s\S]+)(<\/jsgantt>)/
 	,isActivitiesIdentfiedByName : true	// Allows colors to be different then in the setup.
@@ -119,6 +121,12 @@ oJobSchEd.init = function()
 	msg.createRegularForm = false;
 	this.oListAct.oMsg = msg;
 	this.oListAct.oParent = this;
+	
+	// autoedit
+	if (location.href.search(/[&?]jsganttautoedit=1/)>=0)
+	{
+		this.startEditor();
+	}
 }
 if (wgAction=="edit" || wgAction=="submit")
 {
@@ -160,6 +168,15 @@ oJobSchEd.startEditor = function()
 		return;
 	}
 
+	// auto add logged in user
+	if (this.conf.isAutoAddLogged && typeof(wgUserName)=='string' && wgUserName.length)
+	{
+		if (this.firstIdOfPersonByName(wgUserName)===false)
+		{
+			this.addPerson(wgUserName);
+		}
+	}
+
 	// main editor's window - list persons
 	this.oListPersons.show();
 }
@@ -179,6 +196,24 @@ oJobSchEd.indexOfPerson = function(intPersonId)
 		}
 	}
 	return -1;
+}
+
+/* ------------------------------------------------------------------------ *\
+	Find person in the this.arrPersons array by name
+	
+	@return first ID when found, false if not found
+	@warning note that you should test with === false to check if a record was found
+\* ------------------------------------------------------------------------ */
+oJobSchEd.firstIdOfPersonByName = function(strPersonName)
+{
+	for (var i=0; i<this.arrPersons.length; i++)
+	{
+		if (this.arrPersons[i] && this.arrPersons[i].strName==strPersonName)
+		{
+			return this.arrPersons[i].intId;
+		}
+	}
+	return false;
 }
 
 /* ------------------------------------------------------------------------ *\
