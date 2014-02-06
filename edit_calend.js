@@ -14,7 +14,7 @@
                 http://opensource.org/licenses/gpl-license.php
 \* ------------------------------------------------------------------------ */
 //  wersja:
-	var tmp_VERSION = '0.0.1';  // = oJobSchEd.version = oJobSchEd.ver
+	var tmp_VERSION = '0.0.2';  // = oJobSchEd.version = oJobSchEd.ver
 // ------------------------------------------------------------------------ //
 
 /* =====================================================
@@ -40,6 +40,7 @@ oJobSchEd.lang = {"":""
 	,"gantt parse error - no id and name at nr" : "Błąd parsowania kodu przy zadaniu numer %i%. Kod diagramu jest nietypowy, albo uszkodzony."
 	,"gantt parse error - at task" : "Błąd parsowania kodu przy zadaniu o id %pID% (nazwa: %pName%). Ten diagram nie jest kalendarzem, albo są w nim błędy."
 	,"gantt parse error - unknow activity" : "Błąd! Nieznana aktywność (nazwa: %pRes%, kolor: %pColor%). Ten diagram nie jest kalendarzem, albo są w nim błędy."
+	,"gantt build error - at task" : "Błąd budowania wiki-kodu przy zadaniu o id %pID% (nazwa: %pName%).\nBłąd: %errDesc%."
 	,"activities" : [
 		{name: "Urlop", color:"00cc00"},
 		{name: "Delegacja", color:"0000cc"},
@@ -86,12 +87,13 @@ oJobSchEd.startEdit = function()
 	{
 		jsAlert(this.lang["gantt not found"])
 	}
-	if (!this.parse(strWikicode))	// errors inside
+	if (!this.parse(strWikicode))	// on errors messages are displayed inside parse()
 	{
 		return;
 	}
 	//this.showWindow("edit");
 	// tmp
+	strWikicode = this.buildWikicode();
 	this.setContents(strWikicode);
 }
 
@@ -126,58 +128,118 @@ oJobSchEd.setContents = function(strWikicode)
 oJobSchEd.parse = function(strWikicode)
 {
 	var docXML = this.parseToXMLDoc(strWikicode);
-	/*
+	var elsTasks = docXML.getElementsByTagName('task');
+	this.arrPersons = new Array();
+	for (var i=0; i<elsTasks.length; i++)
+	{
+		var oTask = this.preParseTask(elsTasks[i]);
+		if (oTask===false)
+		{
+			return false;
+		}
+		var intPer = this.indexOfPerson (oTask.intPersonId);
+		// new person?
+		if (intPer==-1)
+		{
+			intPer = this.arrPersons.length;
+			this.arrPersons[intPer] = {
+				intId : oTask.intPersonId,
+				strName : oTask.strPersonName,
+				arrActivities : new Array()
+			}
+		}
+		// add activity
+		this.arrPersons[intPer].arrActivities[this.arrPersons[intPer].arrActivities.length] = {
+			strDateStart : oTask.strDateStart,
+			strDateEnd : oTask.strDateEnd,
+			intId : oTask.intActivityId
+		}
+	}
+	return true;
+}
+
+/* ------------------------------------------------------------------------ *\
+	Pre parse single task/activity node
+	
+	Returns:
+	false on error
+	oTask on success
+	{
+		intPersonId		: parsed int as given by user
+		strPersonName	: 'str as given by user'
+		strDateStart	: 'date str as given by user'
+		strDateEnd		: 'date str as given by user'
+		intActivityId	: numeric index in this.lang.activities
+	}
+
+	Expected content of nodeTask:
     <pID>10</pID>
     <pName>Maciek</pName>
     <pStart>2010-07-15</pStart>
     <pEnd>2010-07-30</pEnd>
     <pColor>0000ff</pColor>
     <pRes>Urlop</pRes>
-	*/
-	var tasks = docXML.getElementsByTagName('task');
-	this.arrActivities = [];
-	for (var i=0; i<tasks.length; i++)
+\* ------------------------------------------------------------------------ */
+oJobSchEd.preParseTask = function(nodeTask)
+{
+	var oTask = new Object();
+	
+	// osoba
+	try
 	{
-		// osoba
-		try
+		oTask.intPersonId = parseInt(nodeTask.getElementsByTagName('pID')[0].textContent);
+		oTask.strPersonName = nodeTask.getElementsByTagName('pName')[0].textContent;
+	}
+	catch (e)
+	{
+		jsAlert(this.lang["gantt parse error - no id and name at nr"].replace(/%i%/g, i));
+		return false;
+	}
+	try
+	{
+		// daty
+		oTask.strDateStart = nodeTask.getElementsByTagName('pStart')[0].textContent;
+		oTask.strDateEnd = nodeTask.getElementsByTagName('pEnd')[0].textContent;
+		// rodzaj (nie)aktywności
+		var pColor = nodeTask.getElementsByTagName('pColor')[0].textContent;
+		var pRes = nodeTask.getElementsByTagName('pRes')[0].textContent;
+		oTask.intActivityId = this.getActivityId(pRes, pColor);
+		if (oTask.intActivityId<0)
 		{
-			this.arrActivities[i] = new Object();
-			this.arrActivities[i].personId = tasks[i].getElementsByTagName('pID')[0].textContent;
-			this.arrActivities[i].personName = tasks[i].getElementsByTagName('pName')[0].textContent;
-		}
-		catch (e)
-		{
-			jsAlert(this.lang["gantt parse error - no id and name at nr"].replace(/%i%/g, i));
-			return false;
-		}
-		try
-		{
-			// daty
-			this.arrActivities[i].dateStart = tasks[i].getElementsByTagName('pStart')[0].textContent;
-			this.arrActivities[i].dateEnd = tasks[i].getElementsByTagName('pEnd')[0].textContent;
-			// rodzaj (nie)aktywności
-			var pColor = tasks[i].getElementsByTagName('pColor')[0].textContent;
-			var pRes = tasks[i].getElementsByTagName('pRes')[0].textContent;
-			this.arrActivities[i].activityId = this.getActivityId(pRes, pColor);
-			if (this.arrActivities[i].activityId<0)
-			{
-				jsAlert(this.lang["gantt parse error - unknow activity"]
-					.replace(/%pRes%/g, pRes)
-					.replace(/%pColor%/g, pColor)
-				);
-				return false;
-			}
-		}
-		catch (e)
-		{
-			jsAlert(this.lang["gantt parse error - at task"]
-				.replace(/%pID%/g, this.arrActivities[i].personId)
-				.replace(/%pName%/g, this.arrActivities[i].personName)
+			jsAlert(this.lang["gantt parse error - unknow activity"]
+				.replace(/%pRes%/g, pRes)
+				.replace(/%pColor%/g, pColor)
 			);
 			return false;
 		}
 	}
-	return true;
+	catch (e)
+	{
+		jsAlert(this.lang["gantt parse error - at task"]
+			.replace(/%pID%/g, oTask.intPersonId)
+			.replace(/%pName%/g, oTask.strPersonName)
+		);
+		return false;
+	}
+
+	return oTask;
+}
+
+/* ------------------------------------------------------------------------ *\
+	Find person in the this.arrPersons array
+	
+	index when found, -1 if not found
+\* ------------------------------------------------------------------------ */
+oJobSchEd.indexOfPerson = function(intPersonId)
+{
+	for (var i=0; i<this.arrPersons.length; i++)
+	{
+		if (this.arrPersons[i].intId==intPersonId)
+		{
+			return i;
+		}
+	}
+	return -1;
 }
 
 /* ------------------------------------------------------------------------ *\
@@ -227,7 +289,77 @@ oJobSchEd.parseToXMLDoc = function(strWikicode)
 oJobSchEd.buildWikicode = function()
 {
 	var strWikicode = '';
+	for (var i=0; i<this.arrPersons.length; i++)
+	{
+		for (var j=0; j<this.arrPersons[i].arrActivities.length; j++)
+		{
+			// preapre task object
+			var oTask =
+			{
+				intPersonId		: this.arrPersons[i].intId,
+				strPersonName	: this.arrPersons[i].strName,
+				strDateStart	: this.arrPersons[i].arrActivities[j].strDateStart,
+				strDateEnd		: this.arrPersons[i].arrActivities[j].strDateEnd,
+				intActivityId	: this.arrPersons[i].arrActivities[j].intId
+			}
+			// render and add code
+			strWikicode += this.buildTaskcode(oTask);
+		}
+	}
 	return strWikicode;
+}
+
+/* ------------------------------------------------------------------------ *\
+	Build single task code
+	
+	Returns:
+	'' (empty str) on error
+	wiki code (XML) for the task
+	
+	oTask =
+	{
+		intPersonId		: parsed int as given by user
+		strPersonName	: 'str as given by user'
+		strDateStart	: 'date str as given by user'
+		strDateEnd		: 'date str as given by user'
+		intActivityId	: numeric index in this.lang.activities
+	}
+
+	Ouput of nodeTask:
+    <pID>10</pID>
+    <pName>Maciek</pName>
+    <pStart>2010-07-15</pStart>
+    <pEnd>2010-07-30</pEnd>
+    <pColor>0000ff</pColor>
+    <pRes>Urlop</pRes>
+\* ------------------------------------------------------------------------ */
+oJobSchEd.buildTaskcode = function(oTask)
+{
+	var strWikiCode = '';
+
+	try
+	{
+		strWikiCode = '\n<task>'
+			+'\n\t<pID>'+oTask.intPersonId+'</pID>'
+			+'\n\t<pName>'+oTask.strPersonName+'</pName>'
+			+'\n\t<pStart>'+oTask.strDateStart+'</pStart>'
+			+'\n\t<pEnd>'+oTask.strDateEnd+'</pEnd>'
+			+'\n\t<pColor>'+this.lang.activities[oTask.intActivityId].color+'</pColor>'
+			+'\n\t<pRes>'+this.lang.activities[oTask.intActivityId].name+'</pRes>'
+			+'\n</task>'
+		;
+	}
+	catch (e)
+	{
+		jsAlert(this.lang["gantt build error - at task"]
+			.replace(/%pID%/g, oTask.intPersonId)
+			.replace(/%pName%/g, oTask.strPersonName)
+			.replace(/%errDesc%/g, e.description)
+		);
+		return '';
+	}
+
+	return strWikiCode;
 }
 
 // </nowiki>
