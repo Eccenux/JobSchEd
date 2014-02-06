@@ -37,13 +37,13 @@ oJobSchEd.buildWikicode = function()
 		{
 			// preapre task object
 			var oTask =
-			{
-				intPersonId		: this.arrPersons[i].intId,
-				strPersonName	: this.arrPersons[i].strName,
-				strDateStart	: this.arrPersons[i].arrActivities[j].strDateStart,
-				strDateEnd		: this.arrPersons[i].arrActivities[j].strDateEnd,
-				intActivityId	: this.arrPersons[i].arrActivities[j].intId
-			}
+				{
+					intPersonId		: this.arrPersons[i].intId,
+					strPersonName	: this.arrPersons[i].strName,
+					strDateStart	: this.arrPersons[i].arrActivities[j].strDateStart,
+					strDateEnd		: this.arrPersons[i].arrActivities[j].strDateEnd,
+					intActivityId	: this.arrPersons[i].arrActivities[j].intId
+				}
 			// render and add code
 			strWikicode += this.buildTaskcode(oTask);
 		}
@@ -58,15 +58,6 @@ oJobSchEd.buildWikicode = function()
 	'' (empty str) on error
 	wiki code (XML) for the task
 	
-	oTask =
-	{
-		intPersonId		: parsed int as given by user
-		strPersonName	: 'str as given by user'
-		strDateStart	: 'date str as given by user'
-		strDateEnd		: 'date str as given by user'
-		intActivityId	: numeric index in this.lang.activities
-	}
-
 	Ouput of nodeTask:
     <pID>10</pID>
     <pName>Maciek</pName>

@@ -13,13 +13,26 @@
 
 /* ------------------------------------------------------------------------ *\
 	Constructor
-\* ------------------------------------------------------------------------ */
-function cJobSchEdTask(oTaskStartValues)
+	
+	Hm... Not really needed unless we add some usefull methods...
+\* ------------------------------------------------------------------------ *
+function cJobSchEdTask(isCurrent, oTaskStartValues)
 {
-	// init basic attributes
-	this.intPersonId = (typeof(oTaskStartValues.intPersonId)=='undefined' ? -1 : oTaskStartValues.intPersonId);
-	this.strPersonName = (typeof(oTaskStartValues.strPersonName)=='undefined' ? '' : oTaskStartValues.strPersonName);
-	this.strDateStart = (typeof(oTaskStartValues.strDateStart)=='undefined' ? '' : oTaskStartValues.strDateStart);
-	this.strDateEnd = (typeof(oTaskStartValues.strDateEnd)=='undefined' ? '' : oTaskStartValues.strDateEnd);
-	this.intActivityId = (typeof(oTaskStartValues.intActivityId)=='undefined' ? -1 : oTaskStartValues.intActivityId);
+	// init basic attributes with default
+	this.intPersonId = -1;
+	this.strPersonName = '';
+	this.strDateStart = '';
+	this.strDateEnd = '';
+	this.intActivityId = -1;
+
+	// non default
+	if (typeof(oTaskStartValues)!='undefined')
+	{
+		if (typeof(oTaskStartValues.intPersonId)!='undefined') this.intPersonId = oTaskStartValues.intPersonId;
+		if (typeof(oTaskStartValues.strPersonName)!='undefined') this.strPersonName = oTaskStartValues.strPersonName;
+		if (typeof(oTaskStartValues.strDateStart)!='undefined') this.strDateStart = oTaskStartValues.strDateStart;
+		if (typeof(oTaskStartValues.strDateEnd)!='undefined') this.strDateEnd = oTaskStartValues.strDateEnd;
+		if (typeof(oTaskStartValues.intActivityId)!='undefined') this.intActivityId = oTaskStartValues.intActivityId;
+	}
 }
+/**/

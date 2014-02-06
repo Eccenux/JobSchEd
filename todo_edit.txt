@@ -1,4 +1,6 @@
-﻿Done:
+﻿-----------------------
+ Done
+-----------------------
 * parse code to internal structures
 * render wikicode from internal structures
 ** oJobSchEd.buildWikicode
@@ -10,9 +12,12 @@
 * Task class? Could use something like new this.oTask() and some methods might be moved...;
 ** Not really working... Moving oTask idea to cJobSchEdTask prototype.
 ** Moved methods to different files for easier editing...
+** <del>Change current usage of loose objects to class instances usage</del> - not really needed...
+** Some cleanup
 
-TODO:
-** Change current usage of loose objects to class instances usage
+-----------------------
+ TODO
+-----------------------
 * Dialog with a list of all persons.
 * Dialog with a list of all tasks of a person.
 * Edit dialog based on add dialog.
@@ -21,4 +26,24 @@ TODO:
 * Delete task method.
 * Delete person method.
 
-Someday...
+-----------------------
+ Someday...
+-----------------------
+* Use the loader or simply combain "modules" into one file...
+** Own loader would:
+*** remove inline comments without removing any whitespace (might be troublesome... e.g. "djfhjshd // test").
+*** remove multiline comments but adding an inline comment with the original line number of the end of the comment ("// EOC@line#X").
+*** add an inline comment with the original file name at the begging ("// FileName.js, line#0") and the end of the file ("// FileName.js, EOF").
+*** add modified files to a single file
+*** check if any of the files was modified and serve cached file if not (mod check by cached file date)
+
+-----------------------
+THE LOADER CHECK:
+-----------------------
+	var z = ""+
+		"djfhjshd // test"
+	;
+	var x = /a"aa\/\/a"sa/ " \
+	//\
+	";
+	var x = /aaa*/;

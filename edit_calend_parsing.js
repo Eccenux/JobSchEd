@@ -41,25 +41,6 @@ oJobSchEd.parse = function(strWikicode)
 			return false;
 		}
 		this.addTask (oTask);
-		/*
-		var intPer = this.indexOfPerson (oTask.intPersonId);
-		// new person?
-		if (intPer==-1)
-		{
-			intPer = this.arrPersons.length;
-			this.arrPersons[intPer] = {
-				intId : oTask.intPersonId,
-				strName : oTask.strPersonName,
-				arrActivities : new Array()
-			}
-		}
-		// add activity
-		this.arrPersons[intPer].arrActivities[this.arrPersons[intPer].arrActivities.length] = {
-			strDateStart : oTask.strDateStart,
-			strDateEnd : oTask.strDateEnd,
-			intId : oTask.intActivityId
-		}
-		*/
 	}
 	return true;
 }
@@ -95,14 +76,7 @@ oJobSchEd.addTask = function(oTask)
 	
 	Returns:
 	false on error
-	oTask on success
-	{
-		intPersonId		: parsed int as given by user
-		strPersonName	: 'str as given by user'
-		strDateStart	: 'date str as given by user'
-		strDateEnd		: 'date str as given by user'
-		intActivityId	: numeric index in this.lang.activities
-	}
+	oTask on success (cJobSchEdTask)
 
 	Expected content of nodeTask:
     <pID>10</pID>

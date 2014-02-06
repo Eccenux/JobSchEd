@@ -68,10 +68,6 @@ oJobSchEd.submitAddTaskWindow = function()
 		jsAlert(this.lang["gantt add error - unknown person"]);
 		return;
 	}
-	/*
-	this.oNewTask.strDateStart = this.oNewTask.strDateStart;
-	this.oNewTask.strDateEnd = this.oNewTask.strDateEnd;
-	*/
 
 	// add task
 	this.addTask (this.oNewTask);
