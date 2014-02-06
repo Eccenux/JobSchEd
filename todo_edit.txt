@@ -3,6 +3,14 @@
 * render wikicode from internal structures
 ** oJobSchEd.buildWikicode
 ** oJobSchEd.buildTaskcode
+* Basic add task dialog
 
 TODO:
-* Add task dialog
+* Task class? could use something like new this.oTask() and some methods might be moved...;
+* Dialog with a list of all persons.
+* Dialog with a list of all tasks of a person.
+* Edit dialog based on add dialog.
+* Add person dialog based on add task dialog.
+* Linking everything as on original mockups.
+* Delete task method.
+* Delete person method.

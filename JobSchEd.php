@@ -34,7 +34,7 @@ if( !defined( 'MEDIAWIKI' ) ) {
 $wgExtensionCredits['parserhook'][] = array(
 	'path'         => __FILE__,
 	'name'         => 'JobSchEd',
-	'version'      => '0.0.2',
+	'version'      => '0.0.3',
 	'author'       => 'Maciej Jaros', 
 	'url'          => 'http://www.mediawiki.org/wiki/Extension:JobSchEd',
 	'description'  => ''
@@ -64,6 +64,7 @@ $wgHooks['BeforePageDisplay'][] = 'efJobSchEdSetup';
 function efJobSchEdSetup($wgOut)
 {
 	$wgOut->addHeadItem('JobSchEdJS' , Html::linkedScript( efJobSchEdgetCSSJSLink("edit_calend.js") ) );
+	$wgOut->addHeadItem('jsganttDateJS' , Html::linkedScript( efJobSchEdgetCSSJSLink("date-functions.js") ) );
 	return true;
 }
 

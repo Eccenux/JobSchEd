@@ -14,7 +14,7 @@
                 http://opensource.org/licenses/gpl-license.php
 \* ------------------------------------------------------------------------ */
 //  wersja:
-	var tmp_VERSION = '0.0.2';  // = oJobSchEd.version = oJobSchEd.ver
+	var tmp_VERSION = '0.0.3';  // = oJobSchEd.version = oJobSchEd.ver
 // ------------------------------------------------------------------------ //
 
 /* =====================================================
@@ -28,6 +28,7 @@ var oJobSchEd = new Object();
 oJobSchEd.ver = oJobSchEd.version = tmp_VERSION;
 
 oJobSchEd.conf = {"":""
+	,strFormat : 'Y-m-d'
 	,reGantMatch : /(<jsgantt[^>]*>)([\s\S]+)(<\/jsgantt>)/
 	,isActivitiesIdentfiedByName : true	// Allows colors to be different then in the setup.
 										// Note that colors will be changed upon output to those setup below.
@@ -41,6 +42,7 @@ oJobSchEd.lang = {"":""
 	,"gantt parse error - at task" : "Błąd parsowania kodu przy zadaniu o id %pID% (nazwa: %pName%). Ten diagram nie jest kalendarzem, albo są w nim błędy."
 	,"gantt parse error - unknow activity" : "Błąd! Nieznana aktywność (nazwa: %pRes%, kolor: %pColor%). Ten diagram nie jest kalendarzem, albo są w nim błędy."
 	,"gantt build error - at task" : "Błąd budowania wiki-kodu przy zadaniu o id %pID% (nazwa: %pName%).\nBłąd: %errDesc%."
+	,"gantt add error - unknown person" : "Błąd! Wybrana osoba nie została znaleziona. Czy na pewno dodałeś(-aś) ją wcześniej?"
 	,"activities" : [
 		{name: "Urlop", color:"00cc00"},
 		{name: "Delegacja", color:"0000cc"},
@@ -53,6 +55,15 @@ oJobSchEd.lang = {"":""
 oJobSchEd.init = function()
 {
 	this.addEdButton()
+
+	// form
+	var msg = new sftJSmsg();
+	msg.repositionMsgCenter();
+	msg.styleWidth = 500;
+	msg.showCancel = true;
+	msg.autoOKClose = false;
+	msg.createRegularForm = false;
+	this.oMsg = msg;	
 }
 if (wgAction=="edit" || wgAction=="submit")
 {
@@ -91,10 +102,195 @@ oJobSchEd.startEdit = function()
 	{
 		return;
 	}
-	//this.showWindow("edit");
+
+	this.showAddWin();
 	// tmp
+	/*
 	strWikicode = this.buildWikicode();
 	this.setContents(strWikicode);
+	*/
+}
+
+/* ------------------------------------------------------------------------ *\
+	HTML form creator helper
+	
+	field = {type:'[input type]', lbl: '[field label]',
+		name:'[field_name]', value:'[default value]'}
+	optionally: jsUpdate:'someGlobalVariable = this.value'
+	for text input: maxlen:[max str length]
+	for checkbox: title on the left, label on the right
+\* ------------------------------------------------------------------------ */
+oJobSchEd.createForm = function(arrFields, strHeader)
+{
+	var strRet = ''
+		+ '<h2>'+strHeader+'</h2>'
+		+ '<div style="text-align:left; font-size:12px;" class="msgform">'
+	;
+	for (var i=0; i<arrFields.length; i++)
+	{
+		var oF = arrFields[i];
+		if (typeof(oF.value)=='undefined')
+		{
+			oF.value = '';
+		}
+		switch (oF.type)
+		{
+			default:
+			case 'text':
+				var strExtra = '';
+				strExtra += oF.jsUpdate ? ' onchange="'+oF.jsUpdate+'" ' : '';
+				strExtra += oF.maxlen ? ' maxlength="'+oF.maxlen+'" ' : '';
+				strExtra += oF.maxlen ? ' style="width:'+(oF.maxlen*8)+'px" ' : '';
+				strRet += '<p>'
+					+'<label style="display:inline-block;width:120px;text-align:right;">'+oF.lbl+':</label>'
+					+' <input  type="'+oF.type+'" name="'+oF.name+'" value="'+oF.value+'" '+strExtra+' />'
+					+'</p>'
+				;
+			break;
+			case 'checkbox':
+				var dt = new Date()
+				var strInpId = oF.name+'_'+dt.getTime();
+				var strExtra = '';
+				strExtra += oF.jsUpdate ? ' onchange="'+oF.jsUpdate+'" ' : '';
+				strExtra += oF.value ? ' checked="checked" ' : '';
+				strRet += '<p>'
+					+'<span style="display:inline-block;width:120px;text-align:right;">'+oF.title+':</span>'
+					+' <input id="'+strInpId+'" type="'+oF.type+'" name="'+oF.name+'" value="1" '+strExtra+' />'
+					+'<label for="'+strInpId+'">'+oF.lbl+':</label>'
+					+'</p>'
+				;
+			break;
+			case 'radio':
+				var dt = new Date()
+				var strInpId = oF.name+'_'+dt.getTime();
+				var strExtra = '';
+				strExtra += oF.jsUpdate ? ' onchange="'+oF.jsUpdate+'" ' : '';
+				strRet += '<p>'
+					+'<span style="display:inline-block;width:120px;text-align:right;">'+oF.title+':</span>'
+				;
+				for (var j=0; j<oF.lbls.length; j++)
+				{
+					var oFL = oF.lbls[j];
+					var strSubInpId = strInpId+'_'+oFL.value;
+					var strSubExtra = strExtra;
+					strSubExtra += oF.value==oFL.value ? ' checked="checked" ' : '';
+					strRet += ''
+						+' <input id="'+strSubInpId+'" type="'+oF.type+'" name="'+oF.name+'" value="'+oFL.value+'" '+strSubExtra+' />'
+						+'<label for="'+strSubInpId+'">'+oFL.lbl+'</label>'
+					;
+				}
+				strRet += '</p>';
+			break;
+			case 'select':
+				var dt = new Date()
+				var strInpId = oF.name+'_'+dt.getTime();
+				var strExtra = '';
+				strExtra += oF.jsUpdate ? ' onchange="'+oF.jsUpdate+'" ' : '';
+				strRet += '<p>'
+					+'<span style="display:inline-block;width:120px;text-align:right;">'+oF.title+':</span>'
+					+'<select name="'+oF.name+'">'
+				;
+				for (var j=0; j<oF.lbls.length; j++)
+				{
+					var oFL = oF.lbls[j];
+					var strSubInpId = strInpId+'_'+oFL.value;
+					var strSubExtra ='';//= strExtra;
+					strSubExtra += oF.value==oFL.value ? ' selected="selected" ' : '';
+					strRet += ''
+						+'<option value="'+oFL.value+'" '+strSubExtra+'>'+oFL.lbl+'</option>'
+					;
+				}
+				strRet += '</select></p>';
+			break;
+		}
+	}
+	strRet += ''
+		+ '</div>'
+	;
+	return strRet;
+}
+
+/* ------------------------------------------------------------------------ *\
+	Show/build add window
+\* ------------------------------------------------------------------------ */
+oJobSchEd.showAddWin = function()
+{
+	var msg = this.oMsg;
+	
+	// show form
+	msg.repositionMsgCenter();
+	this.oNewTask = new Object();
+	
+	// persons labels
+	var oPersonLbls = new Array();
+	for (var i=0; i<this.arrPersons.length; i++)
+	{
+		oPersonLbls[oPersonLbls.length] = {
+			value	: this.arrPersons[i].intId,
+			lbl		: this.arrPersons[i].strName
+		};
+	}
+	// activities labels
+	var oActivityLbls = new Array();
+	for (var i=0; i<this.lang.activities.length; i++)
+	{
+		oActivityLbls[oActivityLbls.length] = {
+			value	: i,
+			lbl		: this.lang.activities[i].name
+		};
+	}
+	// defaults
+	this.oNewTask.intPersonId = oPersonLbls[0].value;
+	this.oNewTask.intActivityId = oActivityLbls[0].value;
+	var now = new Date();
+	this.oNewTask.strDateStart = now.dateFormat(this.conf.strFormat);
+	this.oNewTask.strDateEnd = now.dateFormat(this.conf.strFormat);
+	// fields setup
+	var arrFields = [
+		{type:'select', title: this.lang['label - person'], lbls : oPersonLbls, value:this.oNewTask.intPersonId, jsUpdate:'oJobSchEd.oNewTask.intPersonId = this.value'},
+		{type:'select', title: this.lang['label - activity'], lbls : oActivityLbls, value:this.oNewTask.intActivityId, jsUpdate:'oJobSchEd.oNewTask.intActivityId = this.value'},
+		{type:'text', maxlen: 10, lbl: this.lang['label - date start'], value:this.oNewTask.strDateStart, jsUpdate:'oJobSchEd.oNewTask.strDateStart = this.value'},
+		{type:'text', maxlen: 10, lbl: this.lang['label - date end'], value:this.oNewTask.strDateEnd, jsUpdate:'oJobSchEd.oNewTask.strDateEnd = this.value'}
+	]
+	var strHTML = this.createForm(arrFields, this.lang['form header - add']);
+	msg.show(strHTML, 'oJobSchEd.submitAddWindow()');
+}
+
+/* ------------------------------------------------------------------------ *\
+	Submit edit window
+	
+	TODO: some validation of dates?
+\* ------------------------------------------------------------------------ */
+oJobSchEd.submitAddWindow = function()
+{
+	// data parse
+	this.oNewTask.intPersonId = parseInt(this.oNewTask.intPersonId);
+	this.oNewTask.intActivityId = parseInt(this.oNewTask.intActivityId);
+	var intP = this.indexOfPerson(this.oNewTask.intPersonId)
+	if (intP!=-1)
+	{
+		this.oNewTask.strPersonName = this.arrPersons[intP].strName;
+	}
+	else
+	{
+		jsAlert(this.lang["gantt add error - unknown person"]);
+		return;
+	}
+	/*
+	this.oNewTask.strDateStart = this.oNewTask.strDateStart;
+	this.oNewTask.strDateEnd = this.oNewTask.strDateEnd;
+	*/
+
+	// add task
+	this.addTask (this.oNewTask);
+	
+	// build
+	var strWikicode = this.buildWikicode();
+	// output
+	this.setContents(strWikicode);
+	// close
+	var msg = this.oMsg;
+	msg.close();
 }
 
 /* ------------------------------------------------------------------------ *\
@@ -137,6 +333,8 @@ oJobSchEd.parse = function(strWikicode)
 		{
 			return false;
 		}
+		this.addTask (oTask);
+		/*
 		var intPer = this.indexOfPerson (oTask.intPersonId);
 		// new person?
 		if (intPer==-1)
@@ -154,8 +352,35 @@ oJobSchEd.parse = function(strWikicode)
 			strDateEnd : oTask.strDateEnd,
 			intId : oTask.intActivityId
 		}
+		*/
 	}
 	return true;
+}
+
+/* ------------------------------------------------------------------------ *\
+	Add task to the internal persons array
+	
+	oTask is the same as in .preParseTask()
+\* ------------------------------------------------------------------------ */
+oJobSchEd.addTask = function(oTask)
+{
+	var intPer = this.indexOfPerson (oTask.intPersonId);
+	// new person?
+	if (intPer==-1)
+	{
+		intPer = this.arrPersons.length;
+		this.arrPersons[intPer] = {
+			intId : oTask.intPersonId,
+			strName : oTask.strPersonName,
+			arrActivities : new Array()
+		}
+	}
+	// add activity
+	this.arrPersons[intPer].arrActivities[this.arrPersons[intPer].arrActivities.length] = {
+		strDateStart : oTask.strDateStart,
+		strDateEnd : oTask.strDateEnd,
+		intId : oTask.intActivityId
+	}
 }
 
 /* ------------------------------------------------------------------------ *\
@@ -306,7 +531,7 @@ oJobSchEd.buildWikicode = function()
 			strWikicode += this.buildTaskcode(oTask);
 		}
 	}
-	return strWikicode;
+	return strWikicode + "\n";
 }
 
 /* ------------------------------------------------------------------------ *\
