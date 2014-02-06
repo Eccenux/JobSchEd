@@ -3,15 +3,15 @@
 	JobSchEd - Job Schedule Edit
 
 	Needed external modules:
-	* JSWikiGantt ver. 0.3.0 or higher
+	* JSWikiGantt ver. 0.3.0 or higher (includes date-functions.js)
 	* sftJSmsg ver 0.3.0 or higher
  
-    Copyright:  ©2010 Maciej Jaros (pl:User:Nux, en:User:EcceNux)
+    Copyright:  ©2010-2011 Maciej Jaros (pl:User:Nux, en:User:EcceNux)
  
 	To activate this extension, add the following into your LocalSettings.php file:
 	require_once("$IP/extensions/JobSchEd/JobSchEd.php");
 	OR
-	Import edit_calend.modules.mini.js and date-functions.js
+	you could also simply add this script to your wiki: edit_calend.modules.mini.js
 	
 	@ingroup Extensions
 	@author Maciej Jaros <egil@wp.pl>
@@ -33,7 +33,7 @@ if( !defined( 'MEDIAWIKI' ) ) {
 $wgExtensionCredits['parserhook'][] = array(
 	'path'         => __FILE__,
 	'name'         => 'JobSchEd',
-	'version'      => '0.6.7',
+	'version'      => '0.8.0',
 	'author'       => 'Maciej Jaros', 
 	'url'          => 'http://www.mediawiki.org/wiki/Extension:JobSchEd',
 	'description'  => ''
@@ -79,6 +79,10 @@ function efJobSchEdSetup($wgOut)
 	));
 	$wgOut->addHeadItem('JobSchEdJSmini', Html::linkedScript(efJobSchEdgetCSSJSLink($strMiniModulesFile)));
 	
+	// Note! This name should be the same as in other extension
+	//! @todo Make this optional
+	$wgOut->addHeadItem('sftJSmsg' , Html::linkedScript( efJobSchEdgetCSSJSLink("lib/sftJSmsg.js") ) );
+
 	// Note! This name should be the same as in JSWikiGantt extension
 	$wgOut->addHeadItem('jsganttDateJS' , Html::linkedScript( efJobSchEdgetCSSJSLink("date-functions.js") ) );
 	

@@ -42,13 +42,14 @@
 * simpler isChanged
 * Enable adding persons to an empty diagram
 * Titles for links
+* Basic i18n
 
 -----------------------
  TODO
 -----------------------
+* Datepicker
 
 -----------------------
  Someday...
 -----------------------
-* Sort task by start date upon build/on demand?
-* Person select set to read-only?
+* Sort tasks by start date upon build/on demand?

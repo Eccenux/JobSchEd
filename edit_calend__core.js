@@ -14,68 +14,127 @@
                 http://opensource.org/licenses/gpl-license.php
 \* ------------------------------------------------------------------------ */
 //  wersja:
-	var tmp_VERSION = '0.7.0';  // = oJobSchEd.version = oJobSchEd.ver
+	var tmp_VERSION = '0.8.0';  // = oJobSchEd.version = oJobSchEd.ver
 // ------------------------------------------------------------------------ //
 
 /* =====================================================
 	Object Init
    ===================================================== */
+/*
 if (oJobSchEd!=undefined)
 {
 	jsAlert('Błąd krytyczny - konflikt nazw!\n\nJeden ze skryptów używa już nazwy oJobSchEd jako zmienną globalną.');
 }
+*/
 var oJobSchEd = new Object();
 oJobSchEd.ver = oJobSchEd.version = tmp_VERSION;
 
 oJobSchEd.conf = {"":""
-	,isAutoAddLogged : true		// Automatically adds a logged in person if login is not found
-								// Note that this doesn't mean that any task is added and so diagram will be changed only if the users adds a task.
+	,strFallbackLang : 'en'                // Fallback language code
+	,strLang         : wgContentLanguage   // Language to be used (note this probably shouldn't be user selectable, should be site wide)
+	,isAutoAddLogged : true        // Automatically adds a logged in person if login is not found
+	                               // Note that this doesn't mean that any task is added and so diagram will be changed only if the users adds a task.
 	,strFormat : 'Y-m-d'
 	,reGantMatch : /(<jsgantt[^>]*>)([\s\S]+)(<\/jsgantt>)/
-	,isActivitiesIdentfiedByName : true	// Allows colors to be different then in the setup.
-										// Note that colors will be changed upon output to those setup below.
+	,isActivitiesIdentfiedByName : true // Allows colors to be different then in the setup.
+	                                    // Note that colors will be changed upon output to those setup below.
 	// allowed gantt tags? -> error when unsupported tags are found (to avoid editing non-JobSch diagrams)
 	,"img - edit" : 'extensions/JobSchEd/img/edit.png'
 	,"img - list" : 'extensions/JobSchEd/img/list.png'
-	,"img - del" : 'extensions/JobSchEd/img/del.png'
+	,"img - del"  : 'extensions/JobSchEd/img/del.png'
 }
+//
+// i18n
+//
 oJobSchEd.lang = {"":""
-	,"button label" : "Edytuj kalendarz"
-	,"gantt not found" : "Na tej stronie nie znaleziono kalendarza. Dodaj tag &lt;jsgantt autolink='0'&gt;&lt;/jsgantt&gt;, aby móc rozpocząć edycję."
-	,"gantt parse error - general" : "Błąd parsowania kodu. Ten diagram prawdopodobnie nie jest kalendarzem."
-	,"gantt parse error - no id and name at nr" : "Błąd parsowania kodu przy zadaniu numer %i%. Kod diagramu jest nietypowy, albo uszkodzony."
-	,"gantt parse error - at task" : "Błąd parsowania kodu przy zadaniu o id %pID% (nazwa: %pName%). Ten diagram nie jest kalendarzem, albo są w nim błędy."
-	,"gantt parse error - unknow activity" : "Błąd! Nieznana aktywność (nazwa: %pRes%, kolor: %pColor%). Ten diagram nie jest kalendarzem, albo są w nim błędy."
-	,"gantt build error - at task" : "Błąd budowania wiki-kodu przy zadaniu o id %pID% (nazwa: %pName%).\nBłąd: %errDesc%."
-	,"gantt add error - unknown person" : "Błąd! Wybrana osoba nie została znaleziona. Czy na pewno dodałeś(-aś) ją wcześniej?"
-	,"header - add" : "Dodaj wpis"
-	,"header - edit" : "Edytuj wpis"
-	,"header - persons" : "Wybierz osobę"
-	,"header - del" : "Czy na pewno chcesz usunąć?"
-	,"label - person" : "Osoba"
-	,"label - activity" : "Typ"
-	,"label - date start" : "Początek"
-	,"label - date end" : "Koniec"
-	,"label - new activity" : "dodaj wpis"
-	,"label - new person" : "dodaj osobę"
-	,"alt - mod" : "Zmień"
-	,"alt - del" : "Usuń"
-	,"close button label" : "Zamknij"
-	,"title - list act" : "Pokaż wpisy osoby"
-	,"title - edit" : "Edytuj"
-	,"title - add" : "Dodaj"
-	,"title - del" : "Usuń"
-	,"activities" : [
-		{name: "Urlop", color:"00cc00"},
-		{name: "Delegacja", color:"0000cc"},
-		{name: "Choroba", color:"990000"}
-	]
+	,'en' : {"":""
+		,"button label" : "Edit calendar"
+		,"gantt not found"                          : "There seems to be no calendar here. Add a &lt;jsgantt autolink='0'&gt;&lt;/jsgantt&gt; tag, if you want to start."
+		,"gantt parse error - general"              : "Error parsing the gantt diagram code. This diagram is probably not a calendar."
+		,"gantt parse error - no id and name at nr" : "Error parsing code at task number %i%. This calendar is either weird or broken."
+		,"gantt parse error - at task"              : "Error parsing code at task with id %pID% (name: %pName%). This diagram is probably not a calendar or is broken."
+		,"gantt parse error - unknow activity"      : "Error! Unknow activity (name: %pRes%, color: %pColor%). This diagram is probably not a calendar or is broken."
+		,"gantt build error - at task"              : "Error building wikicode at task with id %pID% (name: %pName%).\nError: %errDesc%."
+		,"gantt add error - unknown person"         : "Error! This person was not found. Are you sure you already added this?"
+		,"header - add"         : "Add an entry"
+		,"header - edit"        : "Edit an entry"
+		,"header - persons"     : "Choose a person"
+		,"header - del"         : "Are sure you want to delete this?"
+		,"label - person"       : "Person"
+		,"label - activity"     : "Type"
+		,"label - date start"   : "Start"
+		,"label - date end"     : "End"
+		,"label - new activity" : "add an entry"
+		,"label - new person"   : "add a person"
+		,"alt - mod"            : "Change"
+		,"alt - del"            : "Delete"
+		,"close button label"   : "Close"
+		,"title - list act"     : "Show this person's entries"
+		,"title - edit"         : "Edit"
+		,"title - add"          : "Add"
+		,"title - del"          : "Delete"
+		,"activities" : [
+			{name: "Time off", color:"00cc00"},
+			{name: "Delegation", color:"0000cc"},
+			{name: "Sickness", color:"990000"}
+		]
+	}
+	,'pl' : {"":""
+		,"button label" : "Edytuj kalendarz"
+		,"gantt not found"                          : "Na tej stronie nie znaleziono kalendarza. Dodaj tag &lt;jsgantt autolink='0'&gt;&lt;/jsgantt&gt;, aby móc rozpocząć edycję."
+		,"gantt parse error - general"              : "Błąd parsowania kodu. Ten diagram prawdopodobnie nie jest kalendarzem."
+		,"gantt parse error - no id and name at nr" : "Błąd parsowania kodu przy zadaniu numer %i%. Kod diagramu jest nietypowy, albo uszkodzony."
+		,"gantt parse error - at task"              : "Błąd parsowania kodu przy zadaniu o id %pID% (nazwa: %pName%). Ten diagram nie jest kalendarzem, albo są w nim błędy."
+		,"gantt parse error - unknow activity"      : "Błąd! Nieznana aktywność (nazwa: %pRes%, kolor: %pColor%). Ten diagram nie jest kalendarzem, albo są w nim błędy."
+		,"gantt build error - at task"              : "Błąd budowania wiki-kodu przy zadaniu o id %pID% (nazwa: %pName%).\nBłąd: %errDesc%."
+		,"gantt add error - unknown person"         : "Błąd! Wybrana osoba nie została znaleziona. Czy na pewno dodałeś(-aś) ją wcześniej?"
+		,"header - add"         : "Dodaj wpis"
+		,"header - edit"        : "Edytuj wpis"
+		,"header - persons"     : "Wybierz osobę"
+		,"header - del"         : "Czy na pewno chcesz usunąć?"
+		,"label - person"       : "Osoba"
+		,"label - activity"     : "Typ"
+		,"label - date start"   : "Początek"
+		,"label - date end"     : "Koniec"
+		,"label - new activity" : "dodaj wpis"
+		,"label - new person"   : "dodaj osobę"
+		,"alt - mod"            : "Zmień"
+		,"alt - del"            : "Usuń"
+		,"close button label"   : "Zamknij"
+		,"title - list act"     : "Pokaż wpisy osoby"
+		,"title - edit"         : "Edytuj"
+		,"title - add"          : "Dodaj"
+		,"title - del"          : "Usuń"
+		,"activities" : [
+			{name: "Urlop", color:"00cc00"},
+			{name: "Delegacja", color:"0000cc"},
+			{name: "Choroba", color:"990000"}
+		]
+	}
 }
+
 /* ------------------------------------------------------------------------ *\
 	Add edit button and init messages
 \* ------------------------------------------------------------------------ */
 oJobSchEd.init = function()
 {
+	//
+	// Choose i18n object
+	//
+	if (this.conf.strLang in this.lang)
+	{
+		this.lang = this.lang[this.conf.strLang]
+	}
+	else
+	{
+		this.lang = this.lang[this.conf.strFallbackLang]
+	}
+
+	//
+	// Add buttons and forms/messages
+	//
+	
+	// edit button
 	this.addEdButton()
 
 	// task form

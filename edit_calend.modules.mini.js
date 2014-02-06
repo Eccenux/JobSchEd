@@ -2,18 +2,17 @@
 // _core, line#0
 
 // EOC@line#16
-	var tmp_VERSION = '0.7.0';
+	var tmp_VERSION = '0.8.0';
 // EOC@line#22
-if (oJobSchEd!=undefined)
-{
-	jsAlert('Błąd krytyczny - konflikt nazw!\n\nJeden ze skryptów używa już nazwy oJobSchEd jako zmienną globalną.');
-}
+// EOC@line#28
 var oJobSchEd = new Object();
 oJobSchEd.ver = oJobSchEd.version = tmp_VERSION;
 
 oJobSchEd.conf = {"":""
+	,strFallbackLang : 'en'
+	,strLang         : wgContentLanguage   // Language to be used (note this probably shouldn't be user selectable, should be site wide)
 	,isAutoAddLogged : true
-								// Note that this doesn't mean that any task is added and so diagram will be changed only if the users adds a task.
+	                               // Note that this doesn't mean that any task is added and so diagram will be changed only if the users adds a task.
 	,strFormat : 'Y-m-d'
 	,reGantMatch : /(<jsgantt[^>]*>)([\s\S]+)(<\/jsgantt>)/
 	,isActivitiesIdentfiedByName : true
@@ -21,43 +20,97 @@ oJobSchEd.conf = {"":""
 
 	,"img - edit" : 'extensions/JobSchEd/img/edit.png'
 	,"img - list" : 'extensions/JobSchEd/img/list.png'
-	,"img - del" : 'extensions/JobSchEd/img/del.png'
+	,"img - del"  : 'extensions/JobSchEd/img/del.png'
 }
+
+
+
 oJobSchEd.lang = {"":""
-	,"button label" : "Edytuj kalendarz"
-	,"gantt not found" : "Na tej stronie nie znaleziono kalendarza. Dodaj tag &lt;jsgantt autolink='0'&gt;&lt;/jsgantt&gt;, aby móc rozpocząć edycję."
-	,"gantt parse error - general" : "Błąd parsowania kodu. Ten diagram prawdopodobnie nie jest kalendarzem."
-	,"gantt parse error - no id and name at nr" : "Błąd parsowania kodu przy zadaniu numer %i%. Kod diagramu jest nietypowy, albo uszkodzony."
-	,"gantt parse error - at task" : "Błąd parsowania kodu przy zadaniu o id %pID% (nazwa: %pName%). Ten diagram nie jest kalendarzem, albo są w nim błędy."
-	,"gantt parse error - unknow activity" : "Błąd! Nieznana aktywność (nazwa: %pRes%, kolor: %pColor%). Ten diagram nie jest kalendarzem, albo są w nim błędy."
-	,"gantt build error - at task" : "Błąd budowania wiki-kodu przy zadaniu o id %pID% (nazwa: %pName%).\nBłąd: %errDesc%."
-	,"gantt add error - unknown person" : "Błąd! Wybrana osoba nie została znaleziona. Czy na pewno dodałeś(-aś) ją wcześniej?"
-	,"header - add" : "Dodaj wpis"
-	,"header - edit" : "Edytuj wpis"
-	,"header - persons" : "Wybierz osobę"
-	,"header - del" : "Czy na pewno chcesz usunąć?"
-	,"label - person" : "Osoba"
-	,"label - activity" : "Typ"
-	,"label - date start" : "Początek"
-	,"label - date end" : "Koniec"
-	,"label - new activity" : "dodaj wpis"
-	,"label - new person" : "dodaj osobę"
-	,"alt - mod" : "Zmień"
-	,"alt - del" : "Usuń"
-	,"close button label" : "Zamknij"
-	,"title - list act" : "Pokaż wpisy osoby"
-	,"title - edit" : "Edytuj"
-	,"title - add" : "Dodaj"
-	,"title - del" : "Usuń"
-	,"activities" : [
-		{name: "Urlop", color:"00cc00"},
-		{name: "Delegacja", color:"0000cc"},
-		{name: "Choroba", color:"990000"}
-	]
+	,'en' : {"":""
+		,"button label" : "Edit calendar"
+		,"gantt not found"                          : "There seems to be no calendar here. Add a &lt;jsgantt autolink='0'&gt;&lt;/jsgantt&gt; tag, if you want to start."
+		,"gantt parse error - general"              : "Error parsing the gantt diagram code. This diagram is probably not a calendar."
+		,"gantt parse error - no id and name at nr" : "Error parsing code at task number %i%. This calendar is either weird or broken."
+		,"gantt parse error - at task"              : "Error parsing code at task with id %pID% (name: %pName%). This diagram is probably not a calendar or is broken."
+		,"gantt parse error - unknow activity"      : "Error! Unknow activity (name: %pRes%, color: %pColor%). This diagram is probably not a calendar or is broken."
+		,"gantt build error - at task"              : "Error building wikicode at task with id %pID% (name: %pName%).\nError: %errDesc%."
+		,"gantt add error - unknown person"         : "Error! This person was not found. Are you sure you already added this?"
+		,"header - add"         : "Add an entry"
+		,"header - edit"        : "Edit an entry"
+		,"header - persons"     : "Choose a person"
+		,"header - del"         : "Are sure you want to delete this?"
+		,"label - person"       : "Person"
+		,"label - activity"     : "Type"
+		,"label - date start"   : "Start"
+		,"label - date end"     : "End"
+		,"label - new activity" : "add an entry"
+		,"label - new person"   : "add a person"
+		,"alt - mod"            : "Change"
+		,"alt - del"            : "Delete"
+		,"close button label"   : "Close"
+		,"title - list act"     : "Show this person's entries"
+		,"title - edit"         : "Edit"
+		,"title - add"          : "Add"
+		,"title - del"          : "Delete"
+		,"activities" : [
+			{name: "Time off", color:"00cc00"},
+			{name: "Delegation", color:"0000cc"},
+			{name: "Sickness", color:"990000"}
+		]
+	}
+	,'pl' : {"":""
+		,"button label" : "Edytuj kalendarz"
+		,"gantt not found"                          : "Na tej stronie nie znaleziono kalendarza. Dodaj tag &lt;jsgantt autolink='0'&gt;&lt;/jsgantt&gt;, aby móc rozpocząć edycję."
+		,"gantt parse error - general"              : "Błąd parsowania kodu. Ten diagram prawdopodobnie nie jest kalendarzem."
+		,"gantt parse error - no id and name at nr" : "Błąd parsowania kodu przy zadaniu numer %i%. Kod diagramu jest nietypowy, albo uszkodzony."
+		,"gantt parse error - at task"              : "Błąd parsowania kodu przy zadaniu o id %pID% (nazwa: %pName%). Ten diagram nie jest kalendarzem, albo są w nim błędy."
+		,"gantt parse error - unknow activity"      : "Błąd! Nieznana aktywność (nazwa: %pRes%, kolor: %pColor%). Ten diagram nie jest kalendarzem, albo są w nim błędy."
+		,"gantt build error - at task"              : "Błąd budowania wiki-kodu przy zadaniu o id %pID% (nazwa: %pName%).\nBłąd: %errDesc%."
+		,"gantt add error - unknown person"         : "Błąd! Wybrana osoba nie została znaleziona. Czy na pewno dodałeś(-aś) ją wcześniej?"
+		,"header - add"         : "Dodaj wpis"
+		,"header - edit"        : "Edytuj wpis"
+		,"header - persons"     : "Wybierz osobę"
+		,"header - del"         : "Czy na pewno chcesz usunąć?"
+		,"label - person"       : "Osoba"
+		,"label - activity"     : "Typ"
+		,"label - date start"   : "Początek"
+		,"label - date end"     : "Koniec"
+		,"label - new activity" : "dodaj wpis"
+		,"label - new person"   : "dodaj osobę"
+		,"alt - mod"            : "Zmień"
+		,"alt - del"            : "Usuń"
+		,"close button label"   : "Zamknij"
+		,"title - list act"     : "Pokaż wpisy osoby"
+		,"title - edit"         : "Edytuj"
+		,"title - add"          : "Dodaj"
+		,"title - del"          : "Usuń"
+		,"activities" : [
+			{name: "Urlop", color:"00cc00"},
+			{name: "Delegacja", color:"0000cc"},
+			{name: "Choroba", color:"990000"}
+		]
+	}
 }
-// EOC@line#76
+// EOC@line#118
 oJobSchEd.init = function()
 {
+	//
+
+	//
+	if (this.conf.strLang in this.lang)
+	{
+		this.lang = this.lang[this.conf.strLang]
+	}
+	else
+	{
+		this.lang = this.lang[this.conf.strFallbackLang]
+	}
+
+	//
+
+	//
+
+
 	this.addEdButton()
 
 
@@ -114,7 +167,7 @@ if (wgAction=="edit" || wgAction=="submit")
 {
 	addOnloadHook(function() {oJobSchEd.init()});
 }
-// EOC@line#138
+// EOC@line#197
 oJobSchEd.addEdButton = function()
 {
 	var elTB = document.getElementById('toolbar');
@@ -129,7 +182,7 @@ oJobSchEd.addEdButton = function()
 	nel.appendChild(document.createTextNode(this.lang["button label"]));
 	elTB.appendChild(nel);
 }
-// EOC@line#156
+// EOC@line#215
 oJobSchEd.startEditor = function()
 {
 
@@ -156,7 +209,7 @@ oJobSchEd.startEditor = function()
 	// main editor's window - list persons
 	this.oListPersons.show();
 }
-// EOC@line#188
+// EOC@line#247
 oJobSchEd.indexOfPerson = function(intPersonId)
 {
 	for (var i=0; i<this.arrPersons.length; i++)
@@ -168,7 +221,7 @@ oJobSchEd.indexOfPerson = function(intPersonId)
 	}
 	return -1;
 }
-// EOC@line#206
+// EOC@line#265
 oJobSchEd.firstIdOfPersonByName = function(strPersonName)
 {
 	for (var i=0; i<this.arrPersons.length; i++)
@@ -180,7 +233,7 @@ oJobSchEd.firstIdOfPersonByName = function(strPersonName)
 	}
 	return false;
 }
-// EOC@line#222
+// EOC@line#281
 oJobSchEd.getActivityId = function(pRes, pColor)
 {
 	//"activities"
@@ -196,7 +249,7 @@ oJobSchEd.getActivityId = function(pRes, pColor)
 	}
 	return -1;
 }
-// EOC@line#241
+// EOC@line#300
 oJobSchEd.addTask = function(oTask)
 {
 	var intPer = this.indexOfPerson (oTask.intPersonId);
@@ -217,7 +270,7 @@ oJobSchEd.addTask = function(oTask)
 		intId : oTask.intActivityId
 	}
 }
-// EOC@line#265
+// EOC@line#324
 oJobSchEd.addPerson = function(strPersonName)
 {
 	var intPer = this.arrPersons.length;
@@ -235,7 +288,7 @@ oJobSchEd.addPerson = function(strPersonName)
 		arrActivities : new Array()
 	}
 }
-// EOC@line#286
+// EOC@line#345
 oJobSchEd.setTask = function(oTask, intPersonId, intActIndex)
 {
 	var intPer = this.indexOfPerson (intPersonId);
@@ -252,7 +305,7 @@ oJobSchEd.setTask = function(oTask, intPersonId, intActIndex)
 	}
 	return true;
 }
-// EOC@line#306
+// EOC@line#365
 oJobSchEd.setPerson = function(strPersonName, intPersonId)
 {
 	var intPer = this.indexOfPerson (intPersonId);
@@ -265,7 +318,7 @@ oJobSchEd.setPerson = function(strPersonName, intPersonId)
 	this.arrPersons[intPer].strName = strPersonName;
 	return true;
 }
-// EOC@line#322
+// EOC@line#381
 oJobSchEd.delTask = function(intPersonId, intActIndex)
 {
 	var intPer = this.indexOfPerson (intPersonId);
@@ -278,7 +331,7 @@ oJobSchEd.delTask = function(intPersonId, intActIndex)
 	this.arrPersons[intPer].arrActivities[intActIndex] = undefined;
 	return true;
 }
-// EOC@line#338
+// EOC@line#397
 oJobSchEd.delPerson = function(intPersonId)
 {
 	var intPer = this.indexOfPerson (intPersonId);
@@ -293,7 +346,7 @@ oJobSchEd.delPerson = function(intPersonId)
 	this.arrPersons.myReIndexArray()
 	return true;
 }
-// EOC@line#356
+// EOC@line#415
 Array.prototype.myReIndexArray = function()
 {
 	for (var i=0; i<this.length; i++)
