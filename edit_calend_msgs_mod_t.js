@@ -9,8 +9,6 @@ oJobSchEd.oModTask = new Object();
 \* ------------------------------------------------------------------------ */
 oJobSchEd.oModTask.showAdd = function(intPersonId)
 {
-	var msg = this.oMsg;
-	
 	// get/build activities and persons lables
 	this.buildLabels();
 	
@@ -28,6 +26,7 @@ oJobSchEd.oModTask.showAdd = function(intPersonId)
 	var strHTML = this.oParent.createForm(arrFields, this.oParent.lang['form header - add']);
 
 	// show form
+	var msg = this.oMsg;
 	msg.show(strHTML, 'oJobSchEd.oModTask.submitAdd()');
 	msg.repositionMsgCenter();
 }
@@ -65,8 +64,6 @@ oJobSchEd.oModTask.submitAdd = function()
 \* ------------------------------------------------------------------------ */
 oJobSchEd.oModTask.showEdit = function(intPersonId, intActIndex)
 {
-	var msg = this.oMsg;
-	
 	// get/build activities and persons lables
 	this.buildLabels();
 	
@@ -85,6 +82,7 @@ oJobSchEd.oModTask.showEdit = function(intPersonId, intActIndex)
 	var strHTML = this.oParent.createForm(arrFields, this.oParent.lang['form header - edit']);
 
 	// show form
+	var msg = this.oMsg;
 	msg.show(strHTML, 'oJobSchEd.oModTask.submitEdit('+intPersonId+', '+intActIndex+')');
 	msg.repositionMsgCenter();
 }

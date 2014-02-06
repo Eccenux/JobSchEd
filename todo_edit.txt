@@ -23,6 +23,7 @@
 * Support changing persons in edit dialog.
 * Add person dialog based on add task dialog.
 * Edit person dialog.
+* Reposition cleanup (needs new version of sftJSmsg to work as planned)
 
 -----------------------
  TODO

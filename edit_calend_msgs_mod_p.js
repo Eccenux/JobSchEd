@@ -9,8 +9,6 @@ oJobSchEd.oModPerson = new Object();
 \* ------------------------------------------------------------------------ */
 oJobSchEd.oModPerson.showAdd = function()
 {
-	var msg = this.oMsg;
-	
 	// get/build activities and persons lables
 	//this.buildLabels();
 	
@@ -24,6 +22,7 @@ oJobSchEd.oModPerson.showAdd = function()
 	var strHTML = this.oParent.createForm(arrFields, this.oParent.lang['form header - add']);
 
 	// show form
+	var msg = this.oMsg;
 	msg.show(strHTML, 'oJobSchEd.oModPerson.submitAdd()');
 	msg.repositionMsgCenter();
 }
@@ -47,8 +46,6 @@ oJobSchEd.oModPerson.submitAdd = function()
 \* ------------------------------------------------------------------------ */
 oJobSchEd.oModPerson.showEdit = function(intPersonId)
 {
-	var msg = this.oMsg;
-	
 	// defaults
 	var intPer = this.oParent.indexOfPerson(intPersonId);
 	this.oParent.oNewPerson = {
@@ -60,6 +57,7 @@ oJobSchEd.oModPerson.showEdit = function(intPersonId)
 	var strHTML = this.oParent.createForm(arrFields, this.oParent.lang['form header - edit']);
 
 	// show form
+	var msg = this.oMsg;
 	msg.show(strHTML, 'oJobSchEd.oModPerson.submitEdit('+intPersonId+')');
 	msg.repositionMsgCenter();
 }

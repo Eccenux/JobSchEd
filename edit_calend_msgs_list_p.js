@@ -9,11 +9,6 @@ oJobSchEd.oListPersons = new Object();
 \* ------------------------------------------------------------------------ */
 oJobSchEd.oListPersons.show = function()
 {
-	var msg = this.oMsg;
-	
-	// show form
-	msg.repositionMsgCenter();
-	
 	// persons list
 	var strList = '<ul style="text-align:left">';
 	for (var i=0; i<this.oParent.arrPersons.length; i++)
@@ -41,8 +36,11 @@ oJobSchEd.oListPersons.show = function()
 		+'</li>'
 	;
 	strList += '</ul>';
-	// fields setup
+
+	// show form
+	var msg = this.oMsg;
 	msg.show(strList);
+	msg.repositionMsgCenter();
 }
 
 /* ------------------------------------------------------------------------ *\

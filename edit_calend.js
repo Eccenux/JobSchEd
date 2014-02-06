@@ -14,7 +14,7 @@
                 http://opensource.org/licenses/gpl-license.php
 \* ------------------------------------------------------------------------ */
 //  wersja:
-	var tmp_VERSION = '0.4.0';  // = oJobSchEd.version = oJobSchEd.ver
+	var tmp_VERSION = '0.4.1';  // = oJobSchEd.version = oJobSchEd.ver
 // ------------------------------------------------------------------------ //
 
 /* =====================================================
@@ -49,8 +49,8 @@ oJobSchEd.lang = {"":""
 	,"label - activity" : "Typ"
 	,"label - date start" : "Początek"
 	,"label - date end" : "Koniec"
-	,"label - new activity" : "Dodaj wpis"
-	,"label - new person" : "Dodaj osobę"
+	,"label - new activity" : "dodaj wpis"
+	,"label - new person" : "dodaj osobę"
 	,"alt - mod person" : "Zmień"
 	,"close button label" : "Zamknij"
 	,"activities" : [

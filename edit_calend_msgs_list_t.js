@@ -9,17 +9,12 @@ oJobSchEd.oListAct = new Object();
 \* ------------------------------------------------------------------------ */
 oJobSchEd.oListAct.show = function(intPersonId)
 {
-	var msg = this.oMsg;
-	
 	// remeber last (for refresh)
 	if (typeof(intPersonId)=='undefined')
 	{
 		intPersonId = this.intLastPersonId;
 	}
 	this.intLastPersonId = intPersonId;
-	
-	// show form
-	msg.repositionMsgCenter();
 	
 	// tasks list
 	var strList = '<ul style="text-align:left">';
@@ -54,8 +49,11 @@ oJobSchEd.oListAct.show = function(intPersonId)
 		+'</li>'
 	;
 	strList += '</ul>';
-	// fields setup
+
+	// show form
+	var msg = this.oMsg;
 	msg.show(strList);
+	msg.repositionMsgCenter();
 }
 
 /* ------------------------------------------------------------------------ *\
