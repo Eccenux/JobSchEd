@@ -1,0 +1,8 @@
+﻿Done:
+* parse code to internal structures
+* render wikicode from internal structures
+** oJobSchEd.buildWikicode
+** oJobSchEd.buildTaskcode
+
+TODO:
+* Add task dialog
