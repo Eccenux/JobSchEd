@@ -24,9 +24,22 @@ oJobSchEd.oListPersons.show = function()
 				+'<a href="javascript:oJobSchEd.oListAct.show('+oP.intId.toString()+')">'
 					+oP.strName
 				+'</a>'
+				+' '
+				+'<a href="javascript:oJobSchEd.oModPerson.showEdit('+oP.intId.toString()+')">'
+					+'<img src="" alt="'
+						+this.oParent.lang['alt - mod person']
+					+'" />'
+				+'</a>'
 			+'</li>'
 		;
 	}
+	strList += ''
+		+'<li>'
+			+'<a href="javascript:oJobSchEd.oModPerson.showAdd()">'
+				+this.oParent.lang['label - new person']
+			+'</a>'
+		+'</li>'
+	;
 	strList += '</ul>';
 	// fields setup
 	msg.show(strList);

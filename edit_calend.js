@@ -14,7 +14,7 @@
                 http://opensource.org/licenses/gpl-license.php
 \* ------------------------------------------------------------------------ */
 //  wersja:
-	var tmp_VERSION = '0.3.0';  // = oJobSchEd.version = oJobSchEd.ver
+	var tmp_VERSION = '0.4.0';  // = oJobSchEd.version = oJobSchEd.ver
 // ------------------------------------------------------------------------ //
 
 /* =====================================================
@@ -50,6 +50,8 @@ oJobSchEd.lang = {"":""
 	,"label - date start" : "Początek"
 	,"label - date end" : "Koniec"
 	,"label - new activity" : "Dodaj wpis"
+	,"label - new person" : "Dodaj osobę"
+	,"alt - mod person" : "Zmień"
 	,"close button label" : "Zamknij"
 	,"activities" : [
 		{name: "Urlop", color:"00cc00"},
@@ -74,6 +76,17 @@ oJobSchEd.init = function()
 	msg.createRegularForm = false;
 	this.oModTask.oMsg = msg;
 	this.oModTask.oParent = this;
+
+	// person form
+	var msg = new sftJSmsg();
+	msg.repositionMsgCenter();
+	msg.styleWidth = 500;
+	msg.styleZbase += 30;
+	msg.showCancel = true;
+	msg.autoOKClose = false;
+	msg.createRegularForm = false;
+	this.oModPerson.oMsg = msg;
+	this.oModPerson.oParent = this;
 
 	// persons list
 	var msg = new sftJSmsg();
@@ -203,6 +216,26 @@ oJobSchEd.addTask = function(oTask)
 }
 
 /* ------------------------------------------------------------------------ *\
+	Add person to the internal persons array
+\* ------------------------------------------------------------------------ */
+oJobSchEd.addPerson = function(strPersonName)
+{
+	var intPer = this.arrPersons.length;
+	// new id
+	var intPersonId = this.arrPersons[intPer-1].intId + 10;
+	while (this.indexOfPerson (intPersonId)!=-1)
+	{
+		intPersonId+=10;
+	}
+	// add
+	this.arrPersons[intPer] = {
+		intId : intPersonId,
+		strName : strPersonName,
+		arrActivities : new Array()
+	}
+}
+
+/* ------------------------------------------------------------------------ *\
 	Change task in the internal persons array
 \* ------------------------------------------------------------------------ */
 oJobSchEd.setTask = function(oTask, intPersonId, intActIndex)
@@ -219,6 +252,22 @@ oJobSchEd.setTask = function(oTask, intPersonId, intActIndex)
 		strDateEnd : oTask.strDateEnd,
 		intId : oTask.intActivityId
 	}
+	return true;
+}
+
+/* ------------------------------------------------------------------------ *\
+	Change person in the internal persons array
+\* ------------------------------------------------------------------------ */
+oJobSchEd.setPerson = function(strPersonName, intPersonId)
+{
+	var intPer = this.indexOfPerson (intPersonId);
+	// person not found?
+	if (intPer==-1)
+	{
+		return false;
+	}
+	// change person
+	this.arrPersons[intPer].strName = strPersonName;
 	return true;
 }
 

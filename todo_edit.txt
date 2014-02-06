@@ -21,12 +21,13 @@
 * Common from Add moved out...
 * Edit dialog based on add dialog.
 * Support changing persons in edit dialog.
+* Add person dialog based on add task dialog.
+* Edit person dialog.
 
 -----------------------
  TODO
 -----------------------
-* Add person dialog based on add task dialog.
-* Linking everything as on original mockups.
+* Linking everything as on original mockups (+images).
 * Delete task method.
 * Delete person method.
 * Refresh of fields problem (they are filled with previous values upon add => out of sync with oNewTask => unexpected)
