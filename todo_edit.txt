@@ -31,11 +31,15 @@
 * Use <del>the loader or</del> combine "modules" into one file with a simple loader.
 * edit_calend_cTask -> edit_calend.structures as a more general info file on most important structures
 * Minify core (as a module)
+* Improve minification
+** remove in-line comments
+** remove vertical whitespace from EOL
+* Correction of file change check.
 
 -----------------------
  TODO
 -----------------------
-* Improve minification (in-line comments)
+* Lower memory load in loader - use fopen and fwrite rather then operating on the same string
 
 -----------------------
  Someday...

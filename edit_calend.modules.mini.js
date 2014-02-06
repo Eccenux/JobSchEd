@@ -1,10 +1,8 @@
 
 // edit_calend__core.js, line#0
-// <nowiki>
-// EOC@line#15
-//  wersja:
-	var tmp_VERSION = '0.6.0';  // = oJobSchEd.version = oJobSchEd.ver
-// ------------------------------------------------------------------------ //
+
+// EOC@line#16
+	var tmp_VERSION = '0.6.1';
 // EOC@line#22
 if (oJobSchEd!=undefined)
 {
@@ -16,9 +14,9 @@ oJobSchEd.ver = oJobSchEd.version = tmp_VERSION;
 oJobSchEd.conf = {"":""
 	,strFormat : 'Y-m-d'
 	,reGantMatch : /(<jsgantt[^>]*>)([\s\S]+)(<\/jsgantt>)/
-	,isActivitiesIdentfiedByName : true	// Allows colors to be different then in the setup.
-										// Note that colors will be changed upon output to those setup below.
-	// allowed gantt tags? -> error when unsupported tags are found (to avoid editing non-JobSch diagrams)
+	,isActivitiesIdentfiedByName : true
+
+
 	,"img - edit" : 'extensions/JobSchEd/img/edit.png'
 	,"img - list" : 'extensions/JobSchEd/img/list.png'
 	,"img - del" : 'extensions/JobSchEd/img/del.png'
@@ -56,7 +54,7 @@ oJobSchEd.init = function()
 {
 	this.addEdButton()
 
-	// task form
+
 	var msg = new sftJSmsg();
 	msg.repositionMsgCenter();
 	msg.styleWidth = 500;
@@ -67,7 +65,7 @@ oJobSchEd.init = function()
 	this.oModTask.oMsg = msg;
 	this.oModTask.oParent = this;
 
-	// person form
+
 	var msg = new sftJSmsg();
 	msg.repositionMsgCenter();
 	msg.styleWidth = 500;
@@ -78,7 +76,7 @@ oJobSchEd.init = function()
 	this.oModPerson.oMsg = msg;
 	this.oModPerson.oParent = this;
 
-	// persons list
+
 	var msg = new sftJSmsg();
 	msg.repositionMsgCenter();
 	msg.styleWidth = 300;
@@ -89,7 +87,7 @@ oJobSchEd.init = function()
 	this.oListPersons.oMsg = msg;
 	this.oListPersons.oParent = this;
 
-	// tasks of a person list
+
 	var msg = new sftJSmsg();
 	msg.repositionMsgCenter();
 	msg.styleWidth = 500;
@@ -112,7 +110,7 @@ oJobSchEd.addEdButton = function()
 	{
 		return;
 	}
-	
+
 	var nel = document.createElement('a');
 	nel.href = "javascript:oJobSchEd.startEditor()";
 	nel.style.cssText = "float:right";
@@ -122,19 +120,19 @@ oJobSchEd.addEdButton = function()
 // EOC@line#144
 oJobSchEd.startEditor = function()
 {
-	// read wiki code
+
 	var strWikicode = this.getContents();
 	if (strWikicode===false)
 	{
 		jsAlert(this.lang["gantt not found"])
 	}
-	// parse code to internal structures
-	if (!this.parse(strWikicode))	// on errors messages are displayed inside parse()
+
+	if (!this.parse(strWikicode))
 	{
 		return;
 	}
 
-	// main editor's window - list persons
+
 	this.oListPersons.show();
 }
 // EOC@line#167
@@ -155,8 +153,8 @@ oJobSchEd.getActivityId = function(pRes, pColor)
 	//"activities"
 	for (var i=0; i<this.lang.activities.length; i++)
 	{
-		// name must be matched, color configurable
-		if (this.lang.activities[i].name == pRes 
+
+		if (this.lang.activities[i].name == pRes
 			&& (this.conf.isActivitiesIdentfiedByName || this.lang.activities[i].color == pColor)
 		)
 		{
@@ -169,7 +167,7 @@ oJobSchEd.getActivityId = function(pRes, pColor)
 oJobSchEd.addTask = function(oTask)
 {
 	var intPer = this.indexOfPerson (oTask.intPersonId);
-	// new person?
+
 	if (intPer==-1)
 	{
 		intPer = this.arrPersons.length;
@@ -179,7 +177,7 @@ oJobSchEd.addTask = function(oTask)
 			arrActivities : new Array()
 		}
 	}
-	// add activity
+
 	this.arrPersons[intPer].arrActivities[this.arrPersons[intPer].arrActivities.length] = {
 		strDateStart : oTask.strDateStart,
 		strDateEnd : oTask.strDateEnd,
@@ -190,13 +188,13 @@ oJobSchEd.addTask = function(oTask)
 oJobSchEd.addPerson = function(strPersonName)
 {
 	var intPer = this.arrPersons.length;
-	// new id
+
 	var intPersonId = this.arrPersons[intPer-1].intId + 10;
 	while (this.indexOfPerson (intPersonId)!=-1)
 	{
 		intPersonId+=10;
 	}
-	// add
+
 	this.arrPersons[intPer] = {
 		intId : intPersonId,
 		strName : strPersonName,
@@ -207,12 +205,12 @@ oJobSchEd.addPerson = function(strPersonName)
 oJobSchEd.setTask = function(oTask, intPersonId, intActIndex)
 {
 	var intPer = this.indexOfPerson (intPersonId);
-	// person not found?
+
 	if (intPer==-1)
 	{
 		return false;
 	}
-	// change activity
+
 	this.arrPersons[intPer].arrActivities[intActIndex] = {
 		strDateStart : oTask.strDateStart,
 		strDateEnd : oTask.strDateEnd,
@@ -224,12 +222,12 @@ oJobSchEd.setTask = function(oTask, intPersonId, intActIndex)
 oJobSchEd.setPerson = function(strPersonName, intPersonId)
 {
 	var intPer = this.indexOfPerson (intPersonId);
-	// person not found?
+
 	if (intPer==-1)
 	{
 		return false;
 	}
-	// change person
+
 	this.arrPersons[intPer].strName = strPersonName;
 	return true;
 }
@@ -237,12 +235,12 @@ oJobSchEd.setPerson = function(strPersonName, intPersonId)
 oJobSchEd.delTask = function(intPersonId, intActIndex)
 {
 	var intPer = this.indexOfPerson (intPersonId);
-	// person not found?
+
 	if (intPer==-1)
 	{
 		return false;
 	}
-	// remove activity
+
 	this.arrPersons[intPer].arrActivities[intActIndex] = undefined;
 	return true;
 }
@@ -250,14 +248,14 @@ oJobSchEd.delTask = function(intPersonId, intActIndex)
 oJobSchEd.delPerson = function(intPersonId)
 {
 	var intPer = this.indexOfPerson (intPersonId);
-	// person not found?
+
 	if (intPer==-1)
 	{
 		return false;
 	}
-	// remove
+
 	this.arrPersons[intPer] = undefined;
-	// reindex to remove undefines
+
 	this.arrPersons.myReIndexArray()
 	return true;
 }
@@ -268,7 +266,7 @@ Array.prototype.myReIndexArray = function()
 	{
 		if (this[i]==undefined)
 		{
-			// search for defined...
+
 			for (var j=i; j<this.length; j++)
 			{
 				if (this[j]==undefined)
@@ -281,7 +279,7 @@ Array.prototype.myReIndexArray = function()
 			}
 		}
 	}
-	// fix length
+
 	while (this.length > 0 && this[this.length-1] == undefined)
 	{
 		this.length--;
@@ -374,7 +372,7 @@ oJobSchEd.createForm = function(arrFields, strHeader)
 				{
 					var oFL = oF.lbls[j];
 					var strSubInpId = strInpId+'_'+oFL.value;
-					var strSubExtra ='';//= strExtra;
+					var strSubExtra ='';
 					strSubExtra += oF.value==oFL.value ? ' selected="selected" ' : '';
 					strRet += ''
 						+'<option value="'+oFL.value+'" '+strSubExtra+'>'+oFL.lbl+'</option>'
@@ -404,7 +402,7 @@ oJobSchEd.parseToXMLDoc = function(strWikicode)
 		var parser = new DOMParser();
 		docXML = parser.parseFromString(strWikicode, "text/xml");
 	}
-	else // Internet Explorer
+	else
 	{
 		docXML = new ActiveXObject("Microsoft.XMLDOM");
 		docXML.async = "false";
@@ -433,8 +431,8 @@ oJobSchEd.parse = function(strWikicode)
 oJobSchEd.preParseTask = function(nodeTask)
 {
 	var oTask = new Object();
-	
-	// osoba
+
+
 	try
 	{
 		oTask.intPersonId = parseInt(nodeTask.getElementsByTagName('pID')[0].textContent);
@@ -447,10 +445,10 @@ oJobSchEd.preParseTask = function(nodeTask)
 	}
 	try
 	{
-		// daty
+
 		oTask.strDateStart = nodeTask.getElementsByTagName('pStart')[0].textContent;
 		oTask.strDateEnd = nodeTask.getElementsByTagName('pEnd')[0].textContent;
-		// rodzaj (nie)aktywności
+
 		var pColor = nodeTask.getElementsByTagName('pColor')[0].textContent;
 		var pRes = nodeTask.getElementsByTagName('pRes')[0].textContent;
 		oTask.intActivityId = this.getActivityId(pRes, pColor);
@@ -505,11 +503,11 @@ oJobSchEd.buildWikicode = function()
 	{
 		for (var j=0; j<this.arrPersons[i].arrActivities.length; j++)
 		{
-			if (typeof(this.arrPersons[i].arrActivities[j])=='undefined')	// might be empty after del
+			if (typeof(this.arrPersons[i].arrActivities[j])=='undefined')
 			{
 				continue;
 			}
-			// preapre task object
+
 			var oTask =
 				{
 					intPersonId		: this.arrPersons[i].intId,
@@ -518,7 +516,7 @@ oJobSchEd.buildWikicode = function()
 					strDateEnd		: this.arrPersons[i].arrActivities[j].strDateEnd,
 					intActivityId	: this.arrPersons[i].arrActivities[j].intId
 				}
-			// render and add code
+
 			strWikicode += this.buildTaskcode(oTask);
 		}
 	}
@@ -562,19 +560,19 @@ oJobSchEd.oModPerson = new Object();
 // EOC@line#9
 oJobSchEd.oModPerson.showAdd = function()
 {
-	// get/build activities and persons lables
-	//this.buildLabels();
-	
-	// defaults
+
+
+
+
 	this.oParent.oNewPerson = {
 		strPersonName : ''
 	};
 
-	// fields setup
+
 	var arrFields = this.getArrFields('oJobSchEd.oNewPerson');
 	var strHTML = this.oParent.createForm(arrFields, this.oParent.lang['header - add']);
 
-	// show form
+
 	var msg = this.oMsg;
 	msg.show(strHTML, 'oJobSchEd.oModPerson.submitAdd()');
 	msg.repositionMsgCenter();
@@ -582,26 +580,26 @@ oJobSchEd.oModPerson.showAdd = function()
 // EOC@line#34
 oJobSchEd.oModPerson.submitAdd = function()
 {
-	// add person
+
 	this.oParent.addPerson (this.oParent.oNewPerson.strPersonName);
-	
-	// common stuff (rebuild, refresh...)
+
+
 	this.submitCommon();
 }
 // EOC@line#46
 oJobSchEd.oModPerson.showEdit = function(intPersonId)
 {
-	// defaults
+
 	var intPer = this.oParent.indexOfPerson(intPersonId);
 	this.oParent.oNewPerson = {
 		strPersonName : this.oParent.arrPersons[intPer].strName
 	};
 
-	// fields setup
+
 	var arrFields = this.getArrFields('oJobSchEd.oNewPerson');
 	var strHTML = this.oParent.createForm(arrFields, this.oParent.lang['header - edit']);
 
-	// show form
+
 	var msg = this.oMsg;
 	msg.show(strHTML, 'oJobSchEd.oModPerson.submitEdit('+intPersonId+')');
 	msg.repositionMsgCenter();
@@ -609,23 +607,23 @@ oJobSchEd.oModPerson.showEdit = function(intPersonId)
 // EOC@line#69
 oJobSchEd.oModPerson.submitEdit = function(intPersonId)
 {
-	// add person
+
 	this.oParent.setPerson (this.oParent.oNewPerson.strPersonName, intPersonId);
 
-	// common stuff (rebuild, refresh...)
+
 	this.submitCommon();
 }
 // EOC@line#81
 oJobSchEd.oModPerson.showDel = function(intPersonId)
 {
-	// defaults
+
 	var intPer = this.oParent.indexOfPerson(intPersonId);
 
-	// fields setup
+
 	var strHTML = "<h2>"+this.oParent.lang['header - del']+"</h2>"
 		+ this.oParent.arrPersons[intPer].strName;
 
-	// show form
+
 	var msg = this.oMsg;
 	msg.show(strHTML, 'oJobSchEd.oModPerson.submitDel('+intPersonId+')');
 	msg.repositionMsgCenter();
@@ -633,10 +631,10 @@ oJobSchEd.oModPerson.showDel = function(intPersonId)
 // EOC@line#99
 oJobSchEd.oModPerson.submitDel = function(intPersonId)
 {
-	// add person
+
 	this.oParent.delPerson (intPersonId);
 
-	// common stuff (rebuild, refresh...)
+
 	this.submitCommon();
 }
 // EOC@line#138
@@ -651,14 +649,14 @@ oJobSchEd.oModPerson.getArrFields = function(strNewPersonObject)
 // EOC@line#150
 oJobSchEd.oModPerson.submitCommon = function()
 {
-	// build
+
 	var strWikicode = this.oParent.buildWikicode();
-	// output
+
 	this.oParent.setContents(strWikicode);
-	// close
+
 	this.oMsg.close();
-	
-	// refresh window
+
+
 	this.oParent.oListPersons.refresh();
 }
 // edit_calend_msgs_mod_p.js, EOF
@@ -670,10 +668,10 @@ oJobSchEd.oModTask = new Object();
 // EOC@line#9
 oJobSchEd.oModTask.showAdd = function(intPersonId)
 {
-	// get/build activities and persons lables
+
 	this.buildLabels();
-	
-	// defaults
+
+
 	var now = new Date();
 	this.oParent.oNewTask = {
 		intPersonId : (typeof(intPersonId)=='undefined' ? this.arrPersonLbls[0].value : intPersonId),
@@ -682,11 +680,11 @@ oJobSchEd.oModTask.showAdd = function(intPersonId)
 		strDateEnd : now.dateFormat(this.oParent.conf.strFormat)
 	};
 
-	// fields setup
+
 	var arrFields = this.getArrFields('oJobSchEd.oNewTask');
 	var strHTML = this.oParent.createForm(arrFields, this.oParent.lang['header - add']);
 
-	// show form
+
 	var msg = this.oMsg;
 	msg.show(strHTML, 'oJobSchEd.oModTask.submitAdd()');
 	msg.repositionMsgCenter();
@@ -694,7 +692,7 @@ oJobSchEd.oModTask.showAdd = function(intPersonId)
 // EOC@line#38
 oJobSchEd.oModTask.submitAdd = function()
 {
-	// data parse
+
 	this.oParent.oNewTask.intPersonId = parseInt(this.oParent.oNewTask.intPersonId);
 	this.oParent.oNewTask.intActivityId = parseInt(this.oParent.oNewTask.intActivityId);
 	var intP = this.oParent.indexOfPerson(this.oParent.oNewTask.intPersonId)
@@ -708,19 +706,19 @@ oJobSchEd.oModTask.submitAdd = function()
 		return;
 	}
 
-	// add task
+
 	this.oParent.addTask (this.oParent.oNewTask);
-	
-	// common stuff (rebuild, refresh...)
+
+
 	this.submitCommon();
 }
 // EOC@line#64
 oJobSchEd.oModTask.showEdit = function(intPersonId, intActIndex)
 {
-	// get/build activities and persons lables
+
 	this.buildLabels();
-	
-	// defaults
+
+
 	var intPer = this.oParent.indexOfPerson(intPersonId);
 	var oA = this.oParent.arrPersons[intPer].arrActivities[intActIndex];
 	this.oParent.oNewTask = {
@@ -730,11 +728,11 @@ oJobSchEd.oModTask.showEdit = function(intPersonId, intActIndex)
 		strDateEnd : oA.strDateEnd
 	};
 
-	// fields setup
+
 	var arrFields = this.getArrFields('oJobSchEd.oNewTask');
 	var strHTML = this.oParent.createForm(arrFields, this.oParent.lang['header - edit']);
 
-	// show form
+
 	var msg = this.oMsg;
 	msg.show(strHTML, 'oJobSchEd.oModTask.submitEdit('+intPersonId+', '+intActIndex+')');
 	msg.repositionMsgCenter();
@@ -743,7 +741,7 @@ oJobSchEd.oModTask.showEdit = function(intPersonId, intActIndex)
 oJobSchEd.oModTask.submitEdit = function(intPersonId, intActIndex)
 {
 	var oNewTask = this.oParent.oNewTask;
-	// data parse
+
 	oNewTask.intPersonId = parseInt(oNewTask.intPersonId);
 	oNewTask.intActivityId = parseInt(oNewTask.intActivityId);
 	var intP = this.oParent.indexOfPerson(oNewTask.intPersonId)
@@ -757,35 +755,35 @@ oJobSchEd.oModTask.submitEdit = function(intPersonId, intActIndex)
 		return;
 	}
 
-	// person not changed? => simply change act.
+
 	if (intPersonId==oNewTask.intPersonId)
 	{
 		this.oParent.setTask (oNewTask, intPersonId, intActIndex);
 	}
-	// => remove act. from the previous person and add a new one
+
 	else
 	{
 		this.oParent.delTask (intPersonId, intActIndex);
 		this.oParent.addTask (oNewTask);
 	}
-	
-	// common stuff (rebuild, refresh...)
+
+
 	this.submitCommon();
 }
 // EOC@line#130
 oJobSchEd.oModTask.showDel = function(intPersonId, intActIndex)
 {
-	// defaults
+
 	var intPer = this.oParent.indexOfPerson(intPersonId);
 	var oA = this.oParent.arrPersons[intPer].arrActivities[intActIndex];
 
-	// fields setup
+
 	var strHTML = "<h2>"+this.oParent.lang['header - del']+"</h2>"
 		+oA.strDateStart+" - "+oA.strDateEnd
 		+": "+this.oParent.lang.activities[oA.intId].name
 	;
 
-	// show form
+
 	var msg = this.oMsg;
 	msg.show(strHTML, 'oJobSchEd.oModTask.submitDel('+intPersonId+', '+intActIndex+')');
 	msg.repositionMsgCenter();
@@ -793,16 +791,16 @@ oJobSchEd.oModTask.showDel = function(intPersonId, intActIndex)
 // EOC@line#151
 oJobSchEd.oModTask.submitDel = function(intPersonId, intActIndex)
 {
-	// add person
+
 	this.oParent.delTask (intPersonId, intActIndex);
 
-	// common stuff (rebuild, refresh...)
+
 	this.submitCommon();
 }
 // EOC@line#163
 oJobSchEd.oModTask.buildLabels = function()
 {
-	// persons labels
+
 	this.arrPersonLbls = new Array();
 	for (var i=0; i<this.oParent.arrPersons.length; i++)
 	{
@@ -811,7 +809,7 @@ oJobSchEd.oModTask.buildLabels = function()
 			lbl		: this.oParent.arrPersons[i].strName
 		};
 	}
-	// activities labels
+
 	this.arrActivityLbls = new Array();
 	for (var i=0; i<this.oParent.lang.activities.length; i++)
 	{
@@ -844,15 +842,15 @@ oJobSchEd.oModTask.getArrFields = function(strNewTaskObject)
 // EOC@line#213
 oJobSchEd.oModTask.submitCommon = function()
 {
-	// build
+
 	var strWikicode = this.oParent.buildWikicode();
-	// output
+
 	this.oParent.setContents(strWikicode);
-	// close
+
 	this.oMsg.close();
-	
-	// refresh window<del>s</del>
-	//this.oParent.oListPersons.refresh();
+
+
+
 	this.oParent.oListAct.refresh();
 }
 // edit_calend_msgs_mod_t.js, EOF
@@ -864,7 +862,7 @@ oJobSchEd.oListPersons = new Object();
 // EOC@line#9
 oJobSchEd.oListPersons.show = function()
 {
-	// persons list
+
 	var strList = '<h2>'+this.oParent.lang["header - persons"]+'</h2>';
 	strList += '<ul style="text-align:left">';
 	for (var i=0; i<this.oParent.arrPersons.length; i++)
@@ -901,7 +899,7 @@ oJobSchEd.oListPersons.show = function()
 	;
 	strList += '</ul>';
 
-	// show form
+
 	var msg = this.oMsg;
 	msg.show(strList);
 	msg.repositionMsgCenter();
@@ -909,10 +907,10 @@ oJobSchEd.oListPersons.show = function()
 // EOC@line#57
 oJobSchEd.oListPersons.refresh = function()
 {
-	// close previous
+
 	this.oMsg.close();
 
-	// show again
+
 	this.show();
 }
 // edit_calend_msgs_list_p.js, EOF
@@ -924,16 +922,16 @@ oJobSchEd.oListAct = new Object();
 // EOC@line#9
 oJobSchEd.oListAct.show = function(intPersonId)
 {
-	// remeber last (for refresh)
+
 	if (typeof(intPersonId)=='undefined')
 	{
 		intPersonId = this.intLastPersonId;
 	}
 	this.intLastPersonId = intPersonId;
-	
-	// tasks list
+
+
 	var i = this.oParent.indexOfPerson(intPersonId);
-	// unexpected error (person should be known)
+
 	if (i<0)
 	{
 		return;
@@ -944,7 +942,7 @@ oJobSchEd.oListAct.show = function(intPersonId)
 	for (var j=0; j<oP.arrActivities.length; j++)
 	{
 		var oA = oP.arrActivities[j]
-		if (typeof(oA)=='undefined')	// might be empty after del
+		if (typeof(oA)=='undefined')
 		{
 			continue;
 		}
@@ -974,7 +972,7 @@ oJobSchEd.oListAct.show = function(intPersonId)
 	;
 	strList += '</ul>';
 
-	// show form
+
 	var msg = this.oMsg;
 	msg.show(strList);
 	msg.repositionMsgCenter();
@@ -982,10 +980,10 @@ oJobSchEd.oListAct.show = function(intPersonId)
 // EOC@line#70
 oJobSchEd.oListAct.refresh = function()
 {
-	// close previous
+
 	this.oMsg.close();
 
-	// show again
+
 	this.show();
 }
 // edit_calend_msgs_list_t.js, EOF

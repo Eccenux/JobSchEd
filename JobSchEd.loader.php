@@ -1,28 +1,18 @@
 <?php
 /**
 	Simple JS loader
-	
-	DONE:
-	* add an in-line comment with the original file name:
-	** at the begging ("// FileName.js, line#0")
-	** at the end of the file ("// FileName.js, EOF").
-	* remove multi-line comments but adding an in-line comment with the original line number of the end of the comment ("// EOC@line#X").
-	* add modified files to a single file
-	* check if any of the files was modified and serve cached file if not (mod check by cached file date)
-	TODO:
-	* remove in-line comments without removing any whitespace
-		might be troublesome... e.g. "djfhjshd // test"...
-		maybe we could replace "#\s*\//[^"\n]+[^\\"\n]\n#"->";"
-	* "FileName" shown in the combined file as not a real name (rather a name of a module)?
 */
 class ecSimpleJSLoader
 {
-	var $noCache = false;			// always generate scripts from scratch
+	var $noCache = false;					// always generate scripts from scratch
 	var $wgOut;
 	var $strBaseScriptDir;						// base path for modules and generated scripts
 	var $strBaseModulesName = 'edit_calend_';	// prefix for modules loaded in loadModules
 	var $strMiniModulesElId = 'JobSchEdJSmini';	// element id for a script generated in loadModules
 	var $strMiniModulesName = 'edit_calend.modules.mini.js';	// file name for a script generated in loadModules
+	// minification options
+	var $isRemoveInlineComments = true;
+	var $isRemoveMultiComments = true;
 
 	function __construct($wgOut, $strBaseScriptDir)
 	{
@@ -47,13 +37,13 @@ class ecSimpleJSLoader
 			{
 				foreach ($arrModules as $m)
 				{
-					$intTmpTime = filectime($this->getModulePath($m));
+					$intTmpTime = filemtime($this->getModulePath($m));
 					if ($intTmpTime>$intMaxTime)
 					{
 						$intMaxTime = $intTmpTime;
 					}
 				}
-				$intFileTime = filectime($strOutputPath);
+				$intFileTime = filemtime($strOutputPath);
 			}
 			else
 			{
@@ -94,13 +84,25 @@ class ecSimpleJSLoader
 		$strCode = file_get_contents($strFilePath);
 		
 		// BOM del
-		$strCode = preg_replace('#^﻿#', '', $strCode);
+		$strCode = preg_replace('#^\xEF\xBB\xBF#', '', $strCode);
 		
 		// lines (simpli/uni)fication
 		$strCode = preg_replace(array("#\r\n#", "#\r#"), "\n", $strCode);
 		
+		// remove in-line comments without removing any horizontal whitespace
+		if ($this->isRemoveInlineComments)
+		{
+			$strCode = preg_replace("#[ \t]*\//[^\"\n]*[^\\\"\n](?=\n)#", '', $strCode);
+		}
+		
+		// remove vertical whitespace from EOL
+		$strCode = preg_replace("#[ \t]+\n#", "\n", $strCode);
+		
 		// remove multi-line comments, add in-line comment in format: "// EOC@line#X".
-		$strCode = $this->parseMultiCom($strCode);
+		if ($this->isRemoveMultiComments)
+		{
+			$strCode = $this->parseMultiCom($strCode);
+		}
 		
 		// TODO: Move this outside of this function
 		// add an in-line comment with the original file name
