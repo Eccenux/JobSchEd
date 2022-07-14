@@ -32,7 +32,7 @@ oJobSchEd.ver = oJobSchEd.version = tmp_VERSION;
 oJobSchEd.conf = {"":""
 	,strFallbackLang : 'en'                // Fallback language code
 	,strLang         : wgContentLanguage   // Language to be used (note this probably shouldn't be user selectable, should be site wide)
-	,isAutoAddLogged : true        // Automatically adds a logged in person if login is not found
+	,isAutoAddLogged : false        // Automatically adds a logged in person if login is not found
 	                               // Note that this doesn't mean that any task is added and so diagram will be changed only if the users adds a task.
 	,strFormat : 'Y-m-d'		// date format for date-functions
 	,strFormatJQ : 'yy-mm-dd'	// date format for JQuery date-picker
