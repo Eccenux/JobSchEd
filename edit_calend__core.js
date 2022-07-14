@@ -9,12 +9,12 @@
 	Description:
 	-
  
-    Copyright:  ©2010-2011 Maciej Jaros (pl:User:Nux, en:User:EcceNux)
+    Copyright:  ©2010-2022 Maciej Jaros (pl:User:Nux, en:User:EcceNux)
      Licencja:  GNU General Public License v2
                 http://opensource.org/licenses/gpl-license.php
 \* ------------------------------------------------------------------------ */
 //  wersja:
-	var tmp_VERSION = '0.8.0';  // = oJobSchEd.version = oJobSchEd.ver
+	var tmp_VERSION = '0.10.3';  // = oJobSchEd.version = oJobSchEd.ver
 // ------------------------------------------------------------------------ //
 
 /* =====================================================
@@ -34,8 +34,10 @@ oJobSchEd.conf = {"":""
 	,strLang         : wgContentLanguage   // Language to be used (note this probably shouldn't be user selectable, should be site wide)
 	,isAutoAddLogged : true        // Automatically adds a logged in person if login is not found
 	                               // Note that this doesn't mean that any task is added and so diagram will be changed only if the users adds a task.
-	,strFormat : 'Y-m-d'
-	,reGantMatch : /(<jsgantt[^>]*>)([\s\S]+)(<\/jsgantt>)/
+	,strFormat : 'Y-m-d'		// date format for date-functions
+	,strFormatJQ : 'yy-mm-dd'	// date format for JQuery date-picker
+	,reGantMatch : /(<jsgantt[^>]*>)([\s\S]+)(<\/jsgantt>)/	// MUST match exactly 3 parts: prefix, content, sufix
+	,isCodeIgnoredUpToLastXmlComment : true // Allows you to insert code (e.g. Holidays) that will not be modified. Insert them above other task and end with an XML comment.
 	,isActivitiesIdentfiedByName : true // Allows colors to be different then in the setup.
 	                                    // Note that colors will be changed upon output to those setup below.
 	// allowed gantt tags? -> error when unsupported tags are found (to avoid editing non-JobSch diagrams)
@@ -66,6 +68,9 @@ oJobSchEd.lang = {"":""
 		,"label - date end"     : "End"
 		,"label - new activity" : "add an entry"
 		,"label - new person"   : "add a person"
+		,"button append - edit entries"  : "edit entries"
+		,"button - edit person"     : "Edit person"
+		,"button - delete person"   : "Delete person"
 		,"alt - mod"            : "Change"
 		,"alt - del"            : "Delete"
 		,"close button label"   : "Close"
@@ -76,7 +81,7 @@ oJobSchEd.lang = {"":""
 		,"activities" : [
 			{name: "Time off", color:"00cc00"},
 			{name: "Delegation", color:"0000cc"},
-			{name: "Sickness", color:"990000"}
+			{name: "Sickness", color:"990000"},
 		]
 	}
 	,'pl' : {"":""
@@ -98,6 +103,9 @@ oJobSchEd.lang = {"":""
 		,"label - date end"     : "Koniec"
 		,"label - new activity" : "dodaj wpis"
 		,"label - new person"   : "dodaj osobę"
+		,"button append - edit entries" : "zmień wpisy"
+		,"button - edit person"      : "Zmień osobę"
+		,"button - delete person"    : "Usuń osobę"
 		,"alt - mod"            : "Zmień"
 		,"alt - del"            : "Usuń"
 		,"close button label"   : "Zamknij"
@@ -108,7 +116,7 @@ oJobSchEd.lang = {"":""
 		,"activities" : [
 			{name: "Urlop", color:"00cc00"},
 			{name: "Delegacja", color:"0000cc"},
-			{name: "Choroba", color:"990000"}
+			{name: "Choroba", color:"990000"},
 		]
 	}
 }
@@ -162,7 +170,7 @@ oJobSchEd.init = function()
 	// persons list
 	var msg = new sftJSmsg();
 	msg.repositionMsgCenter();
-	msg.styleWidth = 300;
+	msg.styleWidth = 700;
 	msg.styleZbase += 10;
 	msg.showCancel = false;
 	msg.lang['OK'] = this.lang["close button label"];

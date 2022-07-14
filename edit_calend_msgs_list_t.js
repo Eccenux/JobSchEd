@@ -43,11 +43,12 @@ oJobSchEd.oListAct.show = function(intPersonId)
 					+' '
 					+'<img src="'+this.oParent.conf['img - edit']+'" alt=" " />'
 				+'</a>'
-				+' '
+				+' &bull; '
 				+'<a href="javascript:oJobSchEd.oModTask.showDel('+oP.intId.toString()+', '+j.toString()+')" title="'
 						+this.oParent.lang["title - del"]
 					+'">'
-					+'<img src="'+this.oParent.conf['img - del']+'" alt="'
+					+this.oParent.lang['alt - del']
+					+' <img src="'+this.oParent.conf['img - del']+'" alt="'
 						+this.oParent.lang['alt - del']
 					+'" />'
 				+'</a>'

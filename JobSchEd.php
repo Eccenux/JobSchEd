@@ -5,6 +5,7 @@
 	Needed external modules:
 	* JSWikiGantt ver. 0.3.0 or higher (includes date-functions.js)
 	* sftJSmsg ver 0.3.0 or higher
+	* jquery.ui that contains datepicker (please note that provided CSS was modified; see: lib/datepicker/css/ui-lightness/jquery-ui.custom.css)
  
     Copyright:  ©2010-2011 Maciej Jaros (pl:User:Nux, en:User:EcceNux)
  
@@ -33,7 +34,7 @@ if( !defined( 'MEDIAWIKI' ) ) {
 $wgExtensionCredits['parserhook'][] = array(
 	'path'         => __FILE__,
 	'name'         => 'JobSchEd',
-	'version'      => '0.8.0',
+	'version'      => '0.10.3',
 	'author'       => 'Maciej Jaros', 
 	'url'          => 'http://www.mediawiki.org/wiki/Extension:JobSchEd',
 	'description'  => ''
@@ -66,6 +67,16 @@ function efJobSchEdSetup($wgOut)
 
 	$oLoader = new ecSimpleJSLoader($wgJobSchEdDir);
 	
+	// Note! This name should be the same as in other extensions
+	//! @todo Make this optional
+	$wgOut->addHeadItem('sftJSmsg' , Html::linkedScript( efJobSchEdgetCSSJSLink("lib/sftJSmsg.js") ) );
+
+	// Note! This name should be the same as in other extensions
+	//! @todo Make this optional
+	$wgOut->addHeadItem('jquery.ui.css', Html::linkedStyle ( efJobSchEdgetCSSJSLink("lib/datepicker/css/ui-lightness/jquery-ui.custom.css") ) );
+	$wgOut->addHeadItem('jquery.ui.js' , Html::linkedScript( efJobSchEdgetCSSJSLink("lib/datepicker/js/jquery-ui.custom.min.js") ) );
+	$wgOut->addHeadItem('jquery.ui.datepicker-pl.js' , Html::linkedScript( efJobSchEdgetCSSJSLink("lib/datepicker/js/jquery.ui.datepicker-pl.js") ) );
+
 	// "modules"
 	$strMiniModulesFile = $oLoader->createMiniModules(array(
 		'_core',
@@ -79,17 +90,13 @@ function efJobSchEdSetup($wgOut)
 	));
 	$wgOut->addHeadItem('JobSchEdJSmini', Html::linkedScript(efJobSchEdgetCSSJSLink($strMiniModulesFile)));
 	
-	// Note! This name should be the same as in other extension
-	//! @todo Make this optional
-	$wgOut->addHeadItem('sftJSmsg' , Html::linkedScript( efJobSchEdgetCSSJSLink("lib/sftJSmsg.js") ) );
-
 	// Note! This name should be the same as in JSWikiGantt extension
 	$wgOut->addHeadItem('jsganttDateJS' , Html::linkedScript( efJobSchEdgetCSSJSLink("date-functions.js") ) );
 	
 	return true;
 }
 
-$wgJobSchEdtScriptVersion = 1;
+$wgJobSchEdtScriptVersion = 9;
 function efJobSchEdgetCSSJSLink($strFileName)
 {
 	global $wgJobSchEdtScriptVersion, $wgJobSchEdScriptDir;

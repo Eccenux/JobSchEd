@@ -43,10 +43,11 @@ Done
 * Enable adding persons to an empty diagram
 * Titles for links
 * Basic i18n
-
-TODO
-----
 * Datepicker
+
+10.x
+* Allow inserting code (e.g. Holidays) that will not be modified with this tool (conf isCodeIgnoredUpToLastXmlComment).
+* Labels for buttons.
 
 Someday...
 ----------

@@ -21,14 +21,15 @@ oJobSchEd.oListPersons.show = function()
 						+this.oParent.lang["title - list act"]
 					+'">'
 					+oP.strName
-					+' '
+					+' ('+this.oParent.lang['button append - edit entries']+') '
 					+'<img src="'+this.oParent.conf['img - list']+'" alt=" " />'
 				+'</a>'
-				+' '
+				+' &bull; '
 				+'<a href="javascript:oJobSchEd.oModPerson.showEdit('+oP.intId.toString()+')" title="'
 						+this.oParent.lang["title - edit"]
 					+'">'
-					+'<img src="'+this.oParent.conf['img - edit']+'" alt="'
+					+this.oParent.lang['button - edit person']
+					+' <img src="'+this.oParent.conf['img - edit']+'" alt="'
 						+this.oParent.lang['alt - mod']
 					+'" />'
 				+'</a>'
@@ -36,7 +37,8 @@ oJobSchEd.oListPersons.show = function()
 				+'<a href="javascript:oJobSchEd.oModPerson.showDel('+oP.intId.toString()+')" title="'
 						+this.oParent.lang["title - del"]
 					+'">'
-					+'<img src="'+this.oParent.conf['img - del']+'" alt="'
+					+this.oParent.lang['button - delete person']
+					+' <img src="'+this.oParent.conf['img - del']+'" alt="'
 						+this.oParent.lang['alt - del']
 					+'" />'
 				+'</a>'

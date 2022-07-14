@@ -29,6 +29,8 @@ oJobSchEd.oModTask.showAdd = function(intPersonId)
 	var msg = this.oMsg;
 	msg.show(strHTML, 'oJobSchEd.oModTask.submitAdd()');
 	msg.repositionMsgCenter();
+
+	jQuery( ".datepicker" ).datepicker({ dateFormat: this.oParent.conf.strFormatJQ });
 }
 
 /* ------------------------------------------------------------------------ *\
@@ -76,7 +78,7 @@ oJobSchEd.oModTask.showEdit = function(intPersonId, intActIndex)
 		strDateStart : oA.strDateStart,
 		strDateEnd : oA.strDateEnd
 	};
-
+	
 	// fields setup
 	var arrFields = this.getArrFields('oJobSchEd.oNewTask');
 	var strHTML = this.oParent.createForm(arrFields, this.oParent.lang['header - edit']);
@@ -85,8 +87,10 @@ oJobSchEd.oModTask.showEdit = function(intPersonId, intActIndex)
 	var msg = this.oMsg;
 	msg.show(strHTML, 'oJobSchEd.oModTask.submitEdit('+intPersonId+', '+intActIndex+')');
 	msg.repositionMsgCenter();
-}
 
+	jQuery( ".datepicker" ).datepicker({ dateFormat: this.oParent.conf.strFormatJQ });
+}
+	
 /* ------------------------------------------------------------------------ *\
 	Submit edit task window
 	
@@ -199,10 +203,10 @@ oJobSchEd.oModTask.getArrFields = function(strNewTaskObject)
 			, lbls : this.arrActivityLbls
 			, value:this.oParent.oNewTask.intActivityId
 			, jsUpdate:strNewTaskObject+'.intActivityId = this.value'},
-		{type:'text', maxlen: 10, lbl: this.oParent.lang['label - date start']
+		{type:'date', maxlen: 10, lbl: this.oParent.lang['label - date start']
 			, value:this.oParent.oNewTask.strDateStart
 			, jsUpdate:strNewTaskObject+'.strDateStart = this.value'},
-		{type:'text', maxlen: 10, lbl: this.oParent.lang['label - date end']
+		{type:'date', maxlen: 10, lbl: this.oParent.lang['label - date end']
 			, value:this.oParent.oNewTask.strDateEnd
 			, jsUpdate:strNewTaskObject+'.strDateEnd = this.value'}
 	];

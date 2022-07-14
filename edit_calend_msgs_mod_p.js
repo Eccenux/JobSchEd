@@ -139,7 +139,7 @@ oJobSchEd.oModPerson.buildLabels = function()
 oJobSchEd.oModPerson.getArrFields = function(strNewPersonObject)
 {
 	return [
-		{type:'text', maxlen: 10, lbl: this.oParent.lang['label - person']
+		{type:'text', maxlen: 100, width: 100, lbl: this.oParent.lang['label - person']
 			, value:this.oParent.oNewPerson.strPersonName
 			, jsUpdate:strNewPersonObject+'.strPersonName = this.value'}
 	];

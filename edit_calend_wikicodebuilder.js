@@ -12,6 +12,10 @@ oJobSchEd.getContents = function()
 	var m = el.value.match(this.conf.reGantMatch);
 	if (m)
 	{
+		if (this.conf.isCodeIgnoredUpToLastXmlComment)
+		{
+			m[2] = m[2].replace(/^[\s\S]+<!--[\s\S]+?-->/, '');
+		}
 		return m[2];
 	}
 	return false;
@@ -22,6 +26,13 @@ oJobSchEd.getContents = function()
 oJobSchEd.setContents = function(strWikicode)
 {
 	var el = this.elEditArea;
+	if (this.conf.isCodeIgnoredUpToLastXmlComment)
+	{
+		el.value.replace(this.conf.reGantMatch, function(a, prefix, content, sufix)
+		{
+			strWikicode = content.replace(/(^[\s\S]+<!--[\s\S]+?-->|)[\s\S]+/, '$1'+strWikicode);
+		});
+	}
 	el.value = el.value.replace(this.conf.reGantMatch, "$1"+strWikicode+"$3");
 }
 

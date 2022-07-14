@@ -11,6 +11,7 @@
 		name:'[field_name]', value:'[default value]'}
 	optionally: jsUpdate:'someGlobalVariable = this.value'
 	for text input: maxlen:[max str length]
+	for text input: width:[width in pixels of input (if not given then based on maxlen)]
 	for checkbox: title on the left, label on the right
 \* ------------------------------------------------------------------------ */
 oJobSchEd.createForm = function(arrFields, strHeader)
@@ -38,10 +39,21 @@ oJobSchEd.createForm = function(arrFields, strHeader)
 				var strExtra = '';
 				strExtra += oF.jsUpdate ? ' onchange="'+oF.jsUpdate+'" ' : '';
 				strExtra += oF.maxlen ? ' maxlength="'+oF.maxlen+'" ' : '';
-				strExtra += oF.maxlen ? ' style="width:'+(oF.maxlen*8)+'px" ' : '';
+				strExtra += oF.maxlen ? ' style="width:'+(oF.width ? oF.width : oF.maxlen*8)+'px" ' : '';
 				strRet += '<p>'
 					+'<label style="display:inline-block;width:120px;text-align:right;">'+oF.lbl+':</label>'
 					+' <input  type="'+oF.type+'" name="'+oF.name+'" value="'+oF.value+'" '+strExtra+' />'
+					+'</p>'
+				;
+			break;
+			case 'date':
+				var strExtra = '';
+				strExtra += oF.jsUpdate ? ' onchange="'+oF.jsUpdate+'" ' : '';
+				strExtra += oF.maxlen ? ' maxlength="'+oF.maxlen+'" ' : '';
+				strExtra += oF.maxlen ? ' style="width:'+(oF.maxlen*8)+'px" ' : '';
+				strRet += '<p>'
+					+'<label style="display:inline-block;width:120px;text-align:right;">'+oF.lbl+':</label>'
+					+' <input class="datepicker" type="text" name="'+oF.name+'" value="'+oF.value+'" '+strExtra+' />'
 					+'</p>'
 				;
 			break;
